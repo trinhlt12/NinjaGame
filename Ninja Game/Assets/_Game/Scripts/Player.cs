@@ -10,16 +10,21 @@ namespace _Game.Scripts
         [SerializeField] private LayerMask groundLayer;
         [SerializeField] private float speed;
         [SerializeField] private float jumpForce;
+        [SerializeField] private CapsuleCollider2D playerCollider;
+        [SerializeField] private Transform checkGroundPoint;
     
         private bool _isGrounded;
         private bool _isJumping;
         private bool _isAttacking;
         private bool _isRunning;
+        private bool _isFalling;
     
         private float _horizontal;
         private float _vertical;
     
         private string _currentAnimName;
+        
+        private int _coinAmount = 0;
         void Start()
         {
         
@@ -37,13 +42,16 @@ namespace _Game.Scripts
             //attack
             if (Input.GetKeyDown(KeyCode.C) || Input.GetKeyDown(KeyCode.J))
             {
-                _isAttacking = true;
+                if(!_isGrounded) return;
+                Attack();
             }
         }
 
-        void FixedUpdate()
+        private void FixedUpdate()
         {
             _isGrounded = CheckIfGrounded();
+
+            rb.gravityScale = _isFalling ? 2.5f : 1.5f;
 
             //jump
             if (_isJumping)
@@ -53,9 +61,15 @@ namespace _Game.Scripts
             
             if (!_isGrounded && rb.velocity.y < 0)
             {
+                _isFalling = true;
                 ChangeAnim("fall");
                 _isJumping = false;
             }
+            else
+            {
+                _isFalling = false;
+            }
+            
             
             _horizontal = Input.GetAxisRaw("Horizontal");
 
@@ -67,22 +81,15 @@ namespace _Game.Scripts
                     ChangeAnim("run");
                 }
                 
-                //attack
-                if (_isAttacking)
-                {
-                    Attack();
-                }
-                /*//throw
-                Throw();*/
-                
             }
             
             //Moving
+            if(_isAttacking) return;
             if (Mathf.Abs(_horizontal) > 0.1f)
             {
                 rb.velocity = new Vector2(_horizontal * Time.fixedDeltaTime * speed, rb.velocity.y);
                 transform.rotation = Quaternion.Euler(new Vector3(0, _horizontal > 0 ? 0 : 180, 0));
-            }else if (_isGrounded)
+            }else if (_isGrounded && !_isJumping)
             {
                 ChangeAnim("idle");
                 rb.velocity = Vector2.zero;
@@ -91,27 +98,23 @@ namespace _Game.Scripts
 
         private bool CheckIfGrounded()
         {
-            Debug.DrawLine(transform.position, transform.position + Vector3.down * 1.2f, _isGrounded ? Color.green : Color.red);
-        
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1.2f, groundLayer);
-            /*if (hit.collider != null)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }*/
+            Vector3 pos = transform.position ;
+            Debug.DrawLine(pos, pos + Vector3.down * 1f, _isGrounded ? Color.green : Color.red);
+            
+            RaycastHit2D hit = Physics2D.Raycast(checkGroundPoint.position, Vector2.down, 0.05f, groundLayer);
+            
             return hit.collider != null;
         }
 
         // ReSharper disable Unity.PerformanceAnalysis
         private void Attack()
         {
+            rb.velocity = Vector2.zero;
+            if(_isAttacking) return;
+            _isAttacking = true;
             ChangeAnim("attack");
             //reset attack
-            float attackAnimLength = animator.GetCurrentAnimatorStateInfo(0).length;
-            Invoke(nameof(ResetAttack), 0.01f);
+            Invoke(nameof(ResetAttack), 0.5f);
         }
           
         private void ResetAttack()
@@ -138,6 +141,20 @@ namespace _Game.Scripts
             animator.ResetTrigger(animName);
             _currentAnimName = animName;
             animator.SetTrigger(_currentAnimName);
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if(collision.CompareTag("Coin"))
+            {
+                _coinAmount++;
+                Destroy(collision.gameObject);
+            }
+
+            if (collision.CompareTag("DeathZone"))
+            {
+                ChangeAnim("die");
+            }
         }
     }
 }

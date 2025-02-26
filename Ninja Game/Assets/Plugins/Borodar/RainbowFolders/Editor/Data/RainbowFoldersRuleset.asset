@@ -209,13 +209,13 @@ MonoBehaviour:
     Key: Scripts
     Ordinal: 16
     Priority: 0
-    IconType: 2160
+    IconType: 70
     SmallIcon: {fileID: 0}
     LargeIcon: {fileID: 0}
-    IsIconRecursive: 0
-    BackgroundType: 0
+    IsIconRecursive: 1
+    BackgroundType: 110
     BackgroundTexture: {fileID: 0}
-    IsBackgroundRecursive: 0
+    IsBackgroundRecursive: 1
     IsHidden: 0
   - Type: 0
     Key: Shaders
@@ -344,7 +344,7 @@ MonoBehaviour:
     IconType: 50
     SmallIcon: {fileID: 0}
     LargeIcon: {fileID: 0}
-    IsIconRecursive: 1
+    IsIconRecursive: 0
     BackgroundType: 60
     BackgroundTexture: {fileID: 0}
     IsBackgroundRecursive: 0
