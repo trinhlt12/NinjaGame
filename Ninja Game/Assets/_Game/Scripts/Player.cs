@@ -18,6 +18,7 @@ namespace _Game.Scripts
         private bool _isAttacking;
         private bool _isRunning;
         private bool _isFalling;
+        private bool _isDead = false;
     
         private float _horizontal;
         private float _vertical;
@@ -25,9 +26,13 @@ namespace _Game.Scripts
         private string _currentAnimName;
         
         private int _coinAmount = 0;
-        void Start()
+
+        private Vector3 _savePoint;
+
+        private void Start()
         {
-        
+            SetSavePoint(transform.position);
+            OnInit();
         }
 
         private void Update()
@@ -49,6 +54,8 @@ namespace _Game.Scripts
 
         private void FixedUpdate()
         {
+            if(_isDead) return;
+            
             _isGrounded = CheckIfGrounded();
 
             rb.gravityScale = _isFalling ? 2.5f : 1.5f;
@@ -96,14 +103,35 @@ namespace _Game.Scripts
             }
         }
 
+        public void OnInit()
+        {
+            _isDead = false;
+            _isAttacking = false;
+            _isFalling = false;
+            _isJumping = false;
+            
+            transform.position = _savePoint;
+            
+            ChangeAnim("idle");
+        }
+
         private bool CheckIfGrounded()
         {
+            /*
+            Debug.Log(rb.velocity.y);
+            */
             Vector3 pos = transform.position ;
-            Debug.DrawLine(pos, pos + Vector3.down * 1f, _isGrounded ? Color.green : Color.red);
             
-            RaycastHit2D hit = Physics2D.Raycast(checkGroundPoint.position, Vector2.down, 0.05f, groundLayer);
-            
-            return hit.collider != null;
+            float colliderHeight = playerCollider.size.y;
+            Debug.DrawLine(pos, pos + Vector3.down * (colliderHeight/2 + 0.1f),  _isGrounded ? Color.green : Color.red);
+
+            if (rb.velocity.y <= 0.01f)
+            {
+                RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.down, colliderHeight/2 + 0.1f,groundLayer);
+                return hit.collider != null;
+
+            }
+            return false;
         }
 
         // ReSharper disable Unity.PerformanceAnalysis
@@ -153,8 +181,17 @@ namespace _Game.Scripts
 
             if (collision.CompareTag("DeathZone"))
             {
+                _isDead = true;
                 ChangeAnim("die");
+                
+                Invoke(nameof(OnInit), 1f);
             }
+        }
+
+
+        public void SetSavePoint(Vector3 savePoint)
+        {
+            _savePoint = savePoint;
         }
     }
 }
