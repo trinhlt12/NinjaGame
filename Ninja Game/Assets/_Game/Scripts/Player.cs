@@ -3,16 +3,17 @@ using UnityEngine;
 
 namespace _Game.Scripts
 {
-    public class Player : MonoBehaviour
+    public partial class Player : MonoBehaviour
     {
+        #region VARIABLES
+
         [SerializeField] private Rigidbody2D rb;
-        [SerializeField] private Animator animator;
         [SerializeField] private LayerMask groundLayer;
         [SerializeField] private float speed;
         [SerializeField] private float jumpForce;
         [SerializeField] private CapsuleCollider2D playerCollider;
-        [SerializeField] private Transform checkGroundPoint;
-    
+
+        private bool _isIdle;
         private bool _isGrounded;
         private bool _isJumping;
         private bool _isAttacking;
@@ -22,23 +23,59 @@ namespace _Game.Scripts
     
         private float _horizontal;
         private float _vertical;
-    
-        private string _currentAnimName;
+        private Vector3 _platformOffset;
         
         private int _coinAmount = 0;
 
         private Vector3 _savePoint;
+        
+        private IMovingPlatform _currentMovingPlatform;
+
+        #endregion
+
+        #region UNITY-FUNCTIONS
 
         private void Start()
         {
             SetSavePoint(transform.position);
             OnInit();
         }
+        
 
         private void Update()
         {
-            
-            if (!_isGrounded) return;   
+            PlayerUpdate();
+        }
+
+        private void FixedUpdate()
+        {
+            PlayerFixedUpdate();
+        }
+        
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if(collision.CompareTag("Coin"))
+            {
+                _coinAmount++;
+                Destroy(collision.gameObject);
+            }
+
+            if (collision.CompareTag("DeathZone"))
+            {
+                _isDead = true;
+                ChangeAnim("die");
+                
+                Invoke(nameof(OnInit), 1f);
+            }
+        }
+
+        #endregion
+        
+        private void PlayerUpdate()
+        {
+            _isGrounded = CheckIfGrounded();
+            Debug.Log(_isGrounded);
+
             //jump
             if (Input.GetKeyDown(KeyCode.Space))
             {                
@@ -51,13 +88,18 @@ namespace _Game.Scripts
                 Attack();
             }
         }
-
-        private void FixedUpdate()
+        
+        private void PlayerFixedUpdate()
         {
             if(_isDead) return;
             
-            _isGrounded = CheckIfGrounded();
-
+            //check if player is on moving platform
+            if (_currentMovingPlatform != null && rb.velocity.magnitude <= 0.1f)
+            {
+                var newPosition = _currentMovingPlatform.Position + _platformOffset;
+                transform.position = newPosition;
+            }
+            
             rb.gravityScale = _isFalling ? 2.5f : 1.5f;
 
             //jump
@@ -65,7 +107,6 @@ namespace _Game.Scripts
             {                
                 Jump();
             }
-            
             if (!_isGrounded && rb.velocity.y < 0)
             {
                 _isFalling = true;
@@ -77,38 +118,30 @@ namespace _Game.Scripts
                 _isFalling = false;
             }
             
-            
             _horizontal = Input.GetAxisRaw("Horizontal");
-
-            if (_isGrounded)
-            {
-                //change anim run
-                if (Mathf.Abs(_horizontal) > 0.1f && !_isAttacking)
-                {
-                    ChangeAnim("run");
-                }
-                
-            }
             
             //Moving
             if(_isAttacking) return;
             if (Mathf.Abs(_horizontal) > 0.1f)
-            {
+            {                    
+                ChangeAnim("run");
                 rb.velocity = new Vector2(_horizontal * Time.fixedDeltaTime * speed, rb.velocity.y);
                 transform.rotation = Quaternion.Euler(new Vector3(0, _horizontal > 0 ? 0 : 180, 0));
-            }else if (_isGrounded && !_isJumping)
+                
+            }else if (_isGrounded) //idle
             {
                 ChangeAnim("idle");
                 rb.velocity = Vector2.zero;
             }
         }
-
+        
         public void OnInit()
         {
             _isDead = false;
             _isAttacking = false;
             _isFalling = false;
             _isJumping = false;
+            _currentMovingPlatform = null;
             
             transform.position = _savePoint;
             
@@ -117,18 +150,28 @@ namespace _Game.Scripts
 
         private bool CheckIfGrounded()
         {
-            /*
-            Debug.Log(rb.velocity.y);
-            */
-            Vector3 pos = transform.position ;
             
             float colliderHeight = playerCollider.size.y;
-            Debug.DrawLine(pos, pos + Vector3.down * (colliderHeight/2 + 0.1f),  _isGrounded ? Color.green : Color.red);
-
-            if (rb.velocity.y <= 0.01f)
+            
+            Debug.DrawLine(transform.position + transform.forward , 2 * transform.position + transform.forward - transform.up, _isGrounded ? Color.green : Color.red);
+            
+            if(rb.velocity.y <= 0f) // do not check if player is jumping
             {
-                RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.down, colliderHeight/2 + 0.1f,groundLayer);
-                return hit.collider != null;
+                RaycastHit2D hit = Physics2D.Raycast(transform.position + new Vector3(0.7f, 0,0), Vector2.down, colliderHeight/2 + 0.5f,groundLayer);
+                
+                if (hit.collider == null) 
+                {
+                    Debug.Log("No Ground");
+                    _currentMovingPlatform = null;
+                    return false;
+                }
+
+                if (hit.collider.gameObject.TryGetComponent(out IMovingPlatform movingPlatform))
+                { 
+                    _currentMovingPlatform = movingPlatform;
+                    _platformOffset = transform.position - movingPlatform.Position;
+                }
+                return true;
 
             }
             return false;
@@ -162,33 +205,7 @@ namespace _Game.Scripts
             rb.AddForce(jumpForce * Vector2.up);
             _isJumping = false;
         }
-
-        private void ChangeAnim(string animName)
-        {
-            if (_currentAnimName == animName) return;
-            animator.ResetTrigger(animName);
-            _currentAnimName = animName;
-            animator.SetTrigger(_currentAnimName);
-        }
-
-        private void OnTriggerEnter2D(Collider2D collision)
-        {
-            if(collision.CompareTag("Coin"))
-            {
-                _coinAmount++;
-                Destroy(collision.gameObject);
-            }
-
-            if (collision.CompareTag("DeathZone"))
-            {
-                _isDead = true;
-                ChangeAnim("die");
-                
-                Invoke(nameof(OnInit), 1f);
-            }
-        }
-
-
+        
         public void SetSavePoint(Vector3 savePoint)
         {
             _savePoint = savePoint;

@@ -3,16 +3,21 @@ using UnityEngine;
 
 namespace _Game.Scripts
 {
-    public class MovingPlatform : MonoBehaviour
+    public class MovingPlatform : MonoBehaviour, IMovingPlatform
     {
-        [SerializeField] private Transform aPoint, bPoint;
+        public Transform aPoint, bPoint;
+        
         [SerializeField] private float speed;
+        
+        public Vector2 Velocity 
+            => _platformVelocity;
     
         private Vector3 _target;
         private Vector3 _previousPosition;
         private Vector2 _platformVelocity;
-        private GameObject target = null;
-        private Vector3 _offset;
+        private Vector3 _currentPosition;
+        
+        
         private void Start()
         {
             transform.position = aPoint.position;
@@ -23,6 +28,7 @@ namespace _Game.Scripts
         private void MovePlatform()
         {
             transform.position = Vector3.MoveTowards(transform.position, _target, speed * Time.deltaTime);
+            _currentPosition = this.transform.position;
             
             if(Vector2.Distance(transform.position, aPoint.position) < 0.1f)
             {
@@ -48,43 +54,8 @@ namespace _Game.Scripts
             _platformVelocity = (currentPosition - _previousPosition) / Time.fixedDeltaTime;
             _previousPosition = currentPosition;
             
-            if(target == null) return;
-            target.transform.position = transform.position + _offset;
-            
         }
 
-        private void OnTriggerStay2D(Collider2D collision)
-        {
-            if (collision.gameObject.CompareTag("Player"))
-            {
-                target = collision.gameObject;
-                _offset = target.transform.position - transform.position;
-            }
-        }
-
-        private void OnTriggerExit2D(Collider2D collision)
-        {
-            if (collision.gameObject.CompareTag("Player"))
-            {
-                if(this.gameObject == null) return;
-                target = null;
-            }
-        }
-
-        /*private void OnCollisionEnter2D(Collision2D collision)
-        {
-            if (!collision.gameObject.CompareTag("Player")) return;
-            var rb = collision.gameObject.GetComponent<Rigidbody2D>();
-            if(rb == null) return;
-            rb.velocity += new Vector2(_platformVelocity.x, _platformVelocity.y);
-        }
-        
-        private void OnCollisionExit2D(Collision2D collision)
-        {
-            if (!collision.gameObject.CompareTag("Player")) return;
-            if(collision.transform == null) return;
-            if(this.gameObject == null) return;
-            collision.transform.SetParent(null);
-        }*/
+        public Vector3 Position => _currentPosition;
     }
 }
