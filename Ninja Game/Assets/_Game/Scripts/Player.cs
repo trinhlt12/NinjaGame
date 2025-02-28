@@ -69,6 +69,12 @@ namespace _Game.Scripts
             }
         }
 
+
+        private void OnDrawGizmos()
+        {
+            Debug.DrawLine(transform.position, transform.position + Vector3.down * playerCollider.size.y/2, _isGrounded ? Color.green : Color.red);
+        }
+
         #endregion
         
         private void PlayerUpdate()
@@ -126,12 +132,17 @@ namespace _Game.Scripts
             {                    
                 ChangeAnim("run");
                 rb.velocity = new Vector2(_horizontal * Time.fixedDeltaTime * speed, rb.velocity.y);
+                
                 transform.rotation = Quaternion.Euler(new Vector3(0, _horizontal > 0 ? 0 : 180, 0));
+                
+                /*
+                transform.localScale = new Vector3(_horizontal, 1, 1);
+                */
                 
             }else if (_isGrounded) //idle
             {
                 ChangeAnim("idle");
-                rb.velocity = Vector2.zero;
+                rb.velocity = new Vector2(0, rb.velocity.y);
             }
         }
         
@@ -153,11 +164,13 @@ namespace _Game.Scripts
             
             float colliderHeight = playerCollider.size.y;
             
-            Debug.DrawLine(transform.position + transform.forward , 2 * transform.position + transform.forward - transform.up, _isGrounded ? Color.green : Color.red);
+            /*
+            Debug.DrawLine(transform.position + transform.right , transform.position + transform.right - transform.up, _isGrounded ? Color.green : Color.red);
+            */
             
-            if(rb.velocity.y <= 0f) // do not check if player is jumping
-            {
-                RaycastHit2D hit = Physics2D.Raycast(transform.position + new Vector3(0.7f, 0,0), Vector2.down, colliderHeight/2 + 0.5f,groundLayer);
+            //if(rb.velocity.y <= 0f) // do not check if player is jumping
+            //{
+                RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, colliderHeight/2 + 0.5f,groundLayer);
                 
                 if (hit.collider == null) 
                 {
@@ -173,8 +186,8 @@ namespace _Game.Scripts
                 }
                 return true;
 
-            }
-            return false;
+            //}
+            //return false;
         }
 
         // ReSharper disable Unity.PerformanceAnalysis
