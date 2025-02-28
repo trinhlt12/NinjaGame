@@ -1,10 +1,28 @@
-using System;
 using UnityEngine;
 
 namespace _Game.Scripts
 {
     public partial class Player : Character
     {
+        #region INHERITED-FUNCTIONS
+
+        public override void OnInit()
+        {
+            base.OnInit();
+
+            _isDead = false;
+            _isAttacking = false;
+            _isFalling = false;
+            _isJumping = false;
+            _currentMovingPlatform = null;
+
+            transform.position = _savePoint;
+
+            ChangeAnim("idle");
+        }
+
+        #endregion
+
         #region VARIABLES
 
         [SerializeField] private Rigidbody2D rb;
@@ -19,16 +37,16 @@ namespace _Game.Scripts
         private bool _isAttacking;
         private bool _isRunning;
         private bool _isFalling;
-        private bool _isDead = false;
-    
+        private bool _isDead;
+
         private float _horizontal;
         private float _vertical;
         private Vector3 _platformOffset;
-        
-        private int _coinAmount = 0;
+
+        private int _coinAmount;
 
         private Vector3 _savePoint;
-        
+
         private IMovingPlatform _currentMovingPlatform;
 
         #endregion
@@ -38,9 +56,7 @@ namespace _Game.Scripts
         private void Start()
         {
             SetSavePoint(transform.position);
-            OnInit();
         }
-        
 
         private void Update()
         {
@@ -51,10 +67,10 @@ namespace _Game.Scripts
         {
             PlayerFixedUpdate();
         }
-        
+
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if(collision.CompareTag("Coin"))
+            if (collision.CompareTag("Coin"))
             {
                 _coinAmount++;
                 Destroy(collision.gameObject);
@@ -64,7 +80,7 @@ namespace _Game.Scripts
             {
                 _isDead = true;
                 ChangeAnim("die");
-                
+
                 Invoke(nameof(OnInit), 1f);
             }
         }
@@ -72,47 +88,43 @@ namespace _Game.Scripts
 
         private void OnDrawGizmos()
         {
-            Debug.DrawLine(transform.position, transform.position + Vector3.down * playerCollider.size.y/2, _isGrounded ? Color.green : Color.red);
+            Debug.DrawLine(transform.position, transform.position + Vector3.down * playerCollider.size.y / 2,
+                _isGrounded ? Color.green : Color.red);
         }
 
         #endregion
-        
+
+        #region CUSTOM-FUNCTIONS
+
         private void PlayerUpdate()
         {
             _isGrounded = CheckIfGrounded();
-            Debug.Log(_isGrounded);
 
             //jump
-            if (Input.GetKeyDown(KeyCode.Space))
-            {                
-                _isJumping = true;
-            }
+            if (Input.GetKeyDown(KeyCode.Space)) _isJumping = true;
             //attack
             if (Input.GetKeyDown(KeyCode.C) || Input.GetKeyDown(KeyCode.J))
             {
-                if(!_isGrounded) return;
+                if (!_isGrounded) return;
                 Attack();
             }
         }
-        
+
         private void PlayerFixedUpdate()
         {
-            if(_isDead) return;
-            
+            if (_isDead) return;
+
             //check if player is on moving platform
             if (_currentMovingPlatform != null && rb.velocity.magnitude <= 0.1f)
             {
                 var newPosition = _currentMovingPlatform.Position + _platformOffset;
                 transform.position = newPosition;
             }
-            
+
             rb.gravityScale = _isFalling ? 2.5f : 1.5f;
 
             //jump
-            if (_isJumping && _isGrounded)
-            {                
-                Jump();
-            }
+            if (_isJumping && _isGrounded) Jump();
             if (!_isGrounded && rb.velocity.y < 0)
             {
                 _isFalling = true;
@@ -123,79 +135,59 @@ namespace _Game.Scripts
             {
                 _isFalling = false;
             }
-            
+
             _horizontal = Input.GetAxisRaw("Horizontal");
-            
+
             //Moving / run
-            if(_isAttacking || _isFalling) return;
+            if (_isAttacking || _isFalling) return;
             if (Mathf.Abs(_horizontal) > 0.1f)
-            {                    
+            {
                 ChangeAnim("run");
                 rb.velocity = new Vector2(_horizontal * Time.fixedDeltaTime * speed, rb.velocity.y);
                 transform.rotation = Quaternion.Euler(new Vector3(0, _horizontal > 0 ? 0 : 180, 0));
-                
-            }else if (_isGrounded) //idle
+            }
+            else if (_isGrounded) //idle
             {
                 ChangeAnim("idle");
                 rb.velocity = new Vector2(0, rb.velocity.y);
             }
         }
-        
-        public override void OnInit()
-        {
-            _isDead = false;
-            _isAttacking = false;
-            _isFalling = false;
-            _isJumping = false;
-            _currentMovingPlatform = null;
-            
-            transform.position = _savePoint;
-            
-            ChangeAnim("idle");
-        }
 
         private bool CheckIfGrounded()
         {
-            
-            float colliderHeight = playerCollider.size.y;
-            
+            var colliderHeight = playerCollider.size.y;
+
             /*
-            Debug.DrawLine(transform.position + transform.right , transform.position + transform.right - transform.up, _isGrounded ? Color.green : Color.red);
+            if(rb.velocity.y > 0) return false;
             */
-            
-            //if(rb.velocity.y <= 0f) // do not check if player is jumping
-            //{
-                RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, colliderHeight/2 + 0.5f,groundLayer);
-                
-                if (hit.collider == null) 
-                {
-                    Debug.Log("No Ground");
-                    _currentMovingPlatform = null;
-                    return false;
-                }
+            var hit = Physics2D.Raycast(transform.position, Vector2.down, colliderHeight / 2 + 0.5f, groundLayer);
 
-                if (hit.collider.gameObject.TryGetComponent(out IMovingPlatform movingPlatform))
-                { 
-                    _currentMovingPlatform = movingPlatform;
-                    _platformOffset = transform.position - movingPlatform.Position;
-                }
-                return true;
+            if (hit.collider == null)
+            {
+                _currentMovingPlatform = null;
+                return false;
+            }
 
-            //}
-            //return false;
+            if (hit.collider.gameObject.TryGetComponent(out IMovingPlatform movingPlatform))
+            {
+                _currentMovingPlatform = movingPlatform;
+                _platformOffset = transform.position - movingPlatform.Position;
+            }
+
+            return true;
         }
 
         // ReSharper disable Unity.PerformanceAnalysis
         private void Attack()
         {
             rb.velocity = Vector2.zero;
-            if(_isAttacking) return;
+            if (_isAttacking) return;
             _isAttacking = true;
             ChangeAnim("attack");
             //reset attack
             Invoke(nameof(ResetAttack), 0.5f);
         }
-          
+
         private void ResetAttack()
         {
             _isAttacking = false;
@@ -213,10 +205,12 @@ namespace _Game.Scripts
             rb.AddForce(jumpForce * Vector2.up);
             _isJumping = false;
         }
-        
+
         public void SetSavePoint(Vector3 savePoint)
         {
             _savePoint = savePoint;
         }
+
+        #endregion
     }
 }

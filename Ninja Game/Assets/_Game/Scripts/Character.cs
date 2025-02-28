@@ -1,61 +1,60 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Character : MonoBehaviour
+namespace _Game.Scripts
 {
-    #region VARIABLES
+    public class Character : MonoBehaviour
+    {
+        #region VARIABLES
     
-    [SerializeField] private Animator animator;
+        [SerializeField] private Animator animator;
 
-    private float _hp;
-    private string _currentAnimName;
-    private bool IsDead => _hp <= 0;
+        private float _hp;
+        private string _currentAnimName;
+        private bool IsDead => _hp <= 0;
 
-    #endregion
+        #endregion
 
 
-    private void Start()
-    {
-        OnInit();
-    }
-
-    public virtual void OnInit()
-    {
-        _hp = 100;
-    }
-
-    public virtual void OnDespawn()
-    {
-        
-    }
-    
-    protected void ChangeAnim(string animName)
-    {
-        if (_currentAnimName == animName) return;
-        animator.ResetTrigger(animName);
-        _currentAnimName = animName;
-        animator.SetTrigger(_currentAnimName);
-    }
-
-    private void OnHit(float damage)
-    {
-        if (IsDead)
+        private void Start()
         {
-            _hp -= damage;
+            OnInit();
+        }
 
-            if (_hp <= damage)
+        public virtual void OnInit()
+        {
+            _hp = 100;
+        }
+
+        protected virtual void OnDespawn()
+        {
+        
+        }
+    
+        protected virtual void OnDeath()
+        {
+        
+        }
+    
+        protected virtual void ChangeAnim(string animName)
+        {
+            if (_currentAnimName == animName) return;
+            animator.ResetTrigger(animName);
+            _currentAnimName = animName;
+            animator.SetTrigger(_currentAnimName);
+        }
+
+        private void OnHit(float damage)
+        {
+            if (IsDead)
             {
-                OnDeath();
+                _hp -= damage;
+
+                if (_hp <= damage)
+                {
+                    OnDeath();
+                }
             }
         }
-    }
-
-    private void OnDeath()
-    {
-        
-    }
     
-    
+    }
 }
