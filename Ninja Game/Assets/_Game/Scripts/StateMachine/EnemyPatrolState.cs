@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _Game.Scripts.StateMachine
 {
-    public class PatrolState : IState
+    public class EnemyPatrolState : EnemyState
     {
         #region VARIABLES
 
@@ -13,12 +13,18 @@ namespace _Game.Scripts.StateMachine
         
         #region INHERITED METHODS
 
-        public void OnEnter(Enemy enemy)
+        public EnemyPatrolState(EnemyBlackboard blackboard, string animationName) : base(blackboard, animationName)
+        {
+            
+        }
+
+        public void OnEnter(Enemy enemy, IAnimationHandler animationHandler)
         {
             _randomTime = Random.Range(2.5f, 4f);
             enemy.StopMoving();
             _timer = 0;
         }
+        
 
         public void OnExecute(Enemy enemy)
         {
@@ -44,7 +50,7 @@ namespace _Game.Scripts.StateMachine
                 }
                 else
                 {
-                    enemy.ChangeState(new IdleState());
+                    enemy.ChangeState(new EnemyIdleState());
                 }
             }
         }

@@ -12,7 +12,7 @@ namespace _Game.Scripts.StateMachine
         
         #region INHERITED METHODS
 
-        public void OnEnter(Enemy enemy)
+        public void OnEnter(Enemy enemy, IAnimationHandler animationHandler)
         {
             _timer = 0;
             if(enemy.Target != null)
@@ -29,7 +29,7 @@ namespace _Game.Scripts.StateMachine
             _timer += Time.deltaTime;
             if (_timer >= 1.5f)
             {
-                enemy.ChangeState(new PatrolState());
+                enemy.ChangeState(new EnemyPatrolState());
             }
         }
 

@@ -157,9 +157,6 @@ namespace _Game.Scripts
         {
             var colliderHeight = playerCollider.size.y;
 
-            /*
-            if(rb.velocity.y > 0) return false;
-            */
             var hit = Physics2D.Raycast(transform.position, Vector2.down, colliderHeight / 2 + 0.5f, groundLayer);
 
             if (hit.collider == null)

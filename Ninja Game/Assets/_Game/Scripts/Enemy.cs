@@ -32,7 +32,7 @@ namespace _Game.Scripts
         {
             if (collision.CompareTag("EnemyWall"))
             {
-                ChangeState(new IdleState());
+                ChangeState(new EnemyIdleState());
                 ChangeDirection(!_isRight);
             }
         }
@@ -44,7 +44,7 @@ namespace _Game.Scripts
         public override void OnInit()
         {
             base.OnInit();
-            ChangeState(new IdleState());
+            ChangeState(new EnemyIdleState());
         }
 
         protected override void OnDespawn()
@@ -108,23 +108,27 @@ namespace _Game.Scripts
                 ChangeState(new AttackState());
             }else if(_target != null)
             {
-                ChangeState(new PatrolState());
+                ChangeState(new EnemyPatrolState());
             }
             else
             {
-                ChangeState(new IdleState());
+                ChangeState(new EnemyIdleState());
             }
         }
         
         #endregion
         
-
         public void ChangeState(IState newState)
         {
             _currentState?.OnExit(this);
             _currentState = newState;
             _currentState.OnEnter(this);
         }
-        
+
+        public void PlayAnimation(string animationName)
+        {
+            
+            
+        }
     }
 }

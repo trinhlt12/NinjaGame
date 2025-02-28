@@ -4,7 +4,7 @@ using Random = UnityEngine.Random;
 
 namespace _Game.Scripts.StateMachine
 {
-    public class IdleState : IState
+    public class EnemyIdleState : EnemyState
     {
         #region VARIABLES
 
@@ -15,25 +15,32 @@ namespace _Game.Scripts.StateMachine
         
         #region INHERITED METHODS
 
-        public void OnEnter(Enemy enemy)
+        public EnemyIdleState(EnemyBlackboard blackboard, string animationName) : base(blackboard, animationName)
         {
-            _timer = 0;
-            _randomTime = Random.Range(2.5f, 4f);
-            enemy.StopMoving();
         }
 
-        public void OnExecute(Enemy enemy)
+        public override void Enter()
         {
+            base.Enter();
+            _timer = 0;
+            _randomTime = Random.Range(2.5f, 4f);
+            blackboard.enemy.StopMoving();
+        }
+
+        public override void LogicUpdate()
+        {
+            base.LogicUpdate();
             _timer += Time.deltaTime;
             
             if (_timer > _randomTime)
             {
-                enemy.ChangeState(new PatrolState());
+                blackboard.StateMachine.ChangeState(new EnemyPatrolState(blackboard, "Patrol"));
             }
         }
 
-        public void OnExit(Enemy enemy)
+        public override void Exit()
         {
+            base.Exit();
         }
 
         #endregion
