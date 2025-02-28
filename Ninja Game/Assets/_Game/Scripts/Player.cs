@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace _Game.Scripts
 {
-    public partial class Player : MonoBehaviour
+    public partial class Player : Character
     {
         #region VARIABLES
 
@@ -109,7 +109,7 @@ namespace _Game.Scripts
             rb.gravityScale = _isFalling ? 2.5f : 1.5f;
 
             //jump
-            if (_isJumping)
+            if (_isJumping && _isGrounded)
             {                
                 Jump();
             }
@@ -126,18 +126,13 @@ namespace _Game.Scripts
             
             _horizontal = Input.GetAxisRaw("Horizontal");
             
-            //Moving
-            if(_isAttacking) return;
+            //Moving / run
+            if(_isAttacking || _isFalling) return;
             if (Mathf.Abs(_horizontal) > 0.1f)
             {                    
                 ChangeAnim("run");
                 rb.velocity = new Vector2(_horizontal * Time.fixedDeltaTime * speed, rb.velocity.y);
-                
                 transform.rotation = Quaternion.Euler(new Vector3(0, _horizontal > 0 ? 0 : 180, 0));
-                
-                /*
-                transform.localScale = new Vector3(_horizontal, 1, 1);
-                */
                 
             }else if (_isGrounded) //idle
             {
@@ -146,7 +141,7 @@ namespace _Game.Scripts
             }
         }
         
-        public void OnInit()
+        public override void OnInit()
         {
             _isDead = false;
             _isAttacking = false;

@@ -2,9 +2,9 @@ using UnityEngine;
 
 namespace _Game.Scripts
 {
-    public partial class Player : MonoBehaviour
+    public partial class Player
     {
-        [SerializeField] private Animator animator;
+        /*[SerializeField] private Animator animator;
 
         private string _currentAnimName;
     
@@ -14,6 +14,6 @@ namespace _Game.Scripts
             animator.ResetTrigger(animName);
             _currentAnimName = animName;
             animator.SetTrigger(_currentAnimName);
-        }
+        }*/
     }
 }
