@@ -32,7 +32,7 @@ namespace _Game.Scripts
         {
             if (collision.CompareTag("EnemyWall"))
             {
-                SetTarget(null);
+                ChangeState(new IdleState());
                 ChangeDirection(!_isRight);
             }
         }
@@ -94,7 +94,7 @@ namespace _Game.Scripts
             
         }
 
-        private bool IsTargetInRange()
+        public bool IsTargetInRange()
         {
             if (_target == null) return false;
             return Vector2.Distance(_target.transform.position, this.transform.position) < attackRange;

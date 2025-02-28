@@ -27,6 +27,11 @@ namespace _Game.Scripts.StateMachine
             //if the player is within the enemy's sight
             if (enemy.Target != null)
             {
+                if (enemy.IsTargetInRange())
+                {
+                    enemy.ChangeState(new AttackState());
+                }
+                
                 enemy.ChangeDirection(enemy.Target.transform.position.x > enemy.transform.position.x);
                 enemy.Moving();
             }
