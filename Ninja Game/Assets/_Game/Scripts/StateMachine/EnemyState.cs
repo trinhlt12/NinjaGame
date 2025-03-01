@@ -4,18 +4,8 @@ namespace _Game.Scripts.StateMachine
 {
     public class EnemyState : BaseState<EnemyBlackboard>
     {
-        #region VARIABLES
-        
-        protected string animationName;
-        protected bool isExitingState;
-        protected bool isAnimationFinished;
-        protected float startTime;
-        #endregion
-        
-
-        public EnemyState(EnemyBlackboard blackboard, string animationName) : base(blackboard, animationName)
+        public EnemyState(StateMachine<EnemyBlackboard> stateMachine, EnemyBlackboard blackboard, string animationName) : base(stateMachine, blackboard, animationName)
         {
-            this.animationName = animationName;
         }
 
         public override void Enter()

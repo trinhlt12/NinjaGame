@@ -14,9 +14,10 @@ namespace _Game.Scripts.StateMachine
         #endregion
         
         #region INHERITED METHODS
-
-        public EnemyIdleState(EnemyBlackboard blackboard, string animationName) : base(blackboard, animationName)
+        
+        public EnemyIdleState(StateMachine<EnemyBlackboard> stateMachine, EnemyBlackboard blackboard, string animationName) : base(stateMachine, blackboard, animationName)
         {
+            
         }
 
         public override void Enter()
@@ -27,7 +28,22 @@ namespace _Game.Scripts.StateMachine
             blackboard.enemy.StopMoving();
         }
 
-        public override void LogicUpdate()
+        public override void StateUpdate()
+        {
+            base.StateUpdate();
+            _timer += Time.deltaTime;
+            if(_timer > _randomTime)
+            {
+                stateMachine.ChangeState(new EnemyPatrolState(stateMachine, blackboard, "Patrol"));
+            }
+        }
+        
+        public override void StateFixedUpdate()
+        {
+            base.StateFixedUpdate();
+        }
+
+        /*public override void LogicUpdate()
         {
             base.LogicUpdate();
             _timer += Time.deltaTime;
@@ -36,7 +52,7 @@ namespace _Game.Scripts.StateMachine
             {
                 blackboard.StateMachine.ChangeState(new EnemyPatrolState(blackboard, "Patrol"));
             }
-        }
+        }*/
 
         public override void Exit()
         {

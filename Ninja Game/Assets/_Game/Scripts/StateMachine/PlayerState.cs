@@ -2,7 +2,7 @@ namespace _Game.Scripts.StateMachine
 {
     public class PlayerState : BaseState<PlayerBlackboard>
     {
-        public PlayerState(PlayerBlackboard blackboard, string animationName) : base(blackboard, animationName)
+        public PlayerState(StateMachine<PlayerBlackboard> stateMachine, PlayerBlackboard blackboard, string animationName) : base(stateMachine, blackboard, animationName)
         {
         }
 

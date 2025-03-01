@@ -13,7 +13,7 @@ namespace _Game.Scripts.StateMachine
         
         #region INHERITED METHODS
 
-        public EnemyPatrolState(EnemyBlackboard blackboard, string animationName) : base(blackboard, animationName)
+        public EnemyPatrolState(StateMachine<EnemyBlackboard> stateMachine, EnemyBlackboard blackboard, string animationName) : base(stateMachine, blackboard, animationName)
         {
             
         }
@@ -35,7 +35,7 @@ namespace _Game.Scripts.StateMachine
             {
                 if (enemy.IsTargetInRange())
                 {
-                    enemy.ChangeState(new AttackState());
+                    stateMachine.ChangeState(new AttackState(stateMachine, blackboard, "Attack"));
                 }
                 
                 enemy.ChangeDirection(enemy.Target.transform.position.x > enemy.transform.position.x);
@@ -50,7 +50,7 @@ namespace _Game.Scripts.StateMachine
                 }
                 else
                 {
-                    enemy.ChangeState(new EnemyIdleState());
+                    stateMachine.ChangeState(new EnemyIdleState(stateMachine,blackboard, "Idle"));
                 }
             }
         }

@@ -11,11 +11,13 @@ namespace _Game.Scripts.StateMachine
         protected bool isAnimationFinished;
         protected float startTime;
         protected readonly TBlackboard blackboard;
+        protected readonly StateMachine<TBlackboard> stateMachine;
         
         #endregion
 
-        public BaseState(TBlackboard blackboard, string animationName)
+        public BaseState(StateMachine<TBlackboard> stateMachine, TBlackboard blackboard, string animationName)
         {
+            this.stateMachine = stateMachine;
             this.blackboard = blackboard;
             this.animationName = animationName;
         }
@@ -38,7 +40,7 @@ namespace _Game.Scripts.StateMachine
 
         public virtual void StateUpdate()
         {
-            
+            TransitionChecks();
         }
         
         public virtual void StateFixedUpdate()

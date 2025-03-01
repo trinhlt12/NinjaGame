@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _Game.Scripts.StateMachine
 {
-    public class AttackState: IState
+    public class AttackState: EnemyState
     {
         #region VARIABLES
 
@@ -12,24 +12,30 @@ namespace _Game.Scripts.StateMachine
         
         #region INHERITED METHODS
 
-        public void OnEnter(Enemy enemy, IAnimationHandler animationHandler)
+        public AttackState(StateMachine<EnemyBlackboard> stateMachine, EnemyBlackboard blackboard, string animationName) : base(stateMachine, blackboard, animationName)
         {
+        }
+
+        public override void Enter()
+        {
+            base.Enter();
             _timer = 0;
-            if(enemy.Target != null)
+            if(blackboard.enemy.Target != null)
             {
                 //rotate enemy to face the player
-                enemy.ChangeDirection(enemy.Target.transform.position.x > enemy.transform.position.x);
-                enemy.StopMoving();
-                enemy.Attack();
+                blackboard.enemy.ChangeDirection(blackboard.enemy.Target.transform.position.x > blackboard.enemy.transform.position.x);
+                blackboard.enemy.StopMoving();
+                blackboard.enemy.Attack();
             }
         }
 
-        public void OnExecute(Enemy enemy)
+        public override void StateUpdate()
         {
+            base.StateUpdate();
             _timer += Time.deltaTime;
             if (_timer >= 1.5f)
             {
-                enemy.ChangeState(new EnemyPatrolState());
+                stateMachine.ChangeState(new EnemyPatrolState(stateMachine, blackboard, "Patrol"));
             }
         }
 
