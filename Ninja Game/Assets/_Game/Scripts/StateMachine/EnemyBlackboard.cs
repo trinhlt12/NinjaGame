@@ -7,10 +7,17 @@ namespace _Game.Scripts.StateMachine
     {
         public float attackRange;
         public float moveSpeed;
-        [FormerlySerializedAs("_isRight")] public bool isRight = true;
-        [FormerlySerializedAs("_target")] public Character target;
+        public bool isRight = true;
+        public Character target;
+        
+        public bool isTargetInAttackRange;
 
-        public Character Target => target;
+        public Character Target
+        {
+            get => target;
+            set => target = value;
+        }
+
         public EnemyBlackboard(Enemy enemy)
         {
             this.enemy = enemy;

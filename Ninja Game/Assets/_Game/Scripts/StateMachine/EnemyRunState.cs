@@ -42,7 +42,7 @@ namespace _Game.Scripts.StateMachine
             {
                 if (EnemyBb.enemy.IsTargetInRange())
                 {
-                    stateMachine.ChangeState(new AttackState(stateMachine, EnemyBb, "attack"));
+                    stateMachine.ChangeState(new EnemyAttackState(stateMachine, EnemyBb, "attack"));
                 }
                 
                 EnemyBb.enemy.ChangeDirection(EnemyBb.Target.transform.position.x > EnemyBb.transform.position.x);
@@ -79,6 +79,7 @@ namespace _Game.Scripts.StateMachine
         {
             EnemyBb.rigidbody2D.velocity = Vector2.zero;
         }
+        
         
         
 

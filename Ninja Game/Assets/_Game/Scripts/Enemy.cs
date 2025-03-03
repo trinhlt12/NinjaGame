@@ -2,24 +2,20 @@ using System;
 using _Game.Scripts.StateMachine;
 using Unity.VisualScripting;
 using UnityEngine;
-using IState = _Game.Scripts.StateMachine.IState;
 
 namespace _Game.Scripts
 {
     public class Enemy : Character
     {
         #region VARIABLES
-        [SerializeField] private float attackRange;
         [SerializeField] private Rigidbody2D rb;
         [SerializeField] private EnemyBlackboard enemyBB;
+
+        public float attackRange;
         
         private bool _isRight = true;
-        private Character _target;
-        
         private StateMachine<EnemyBlackboard> _enemyStateMachine;
         
-        public Character Target => _target;
-
         #endregion
         
         #region UNITY CALLBACKS
@@ -97,38 +93,21 @@ namespace _Game.Scripts
             transform.rotation = isRight ? Quaternion.Euler(0, 0, 0) : Quaternion.Euler(0, 180, 0);
         }
         
-        //Actions
-        
-        public void Attack()
-        {
-            
-        }
-
         public bool IsTargetInRange()
         {
-            if (_target == null) return false;
-            return Vector2.Distance(_target.transform.position, this.transform.position) < attackRange;
+            if (enemyBB.Target == null) return false;
+            return Vector2.Distance(enemyBB.Target.transform.position, this.transform.position) < attackRange;
         }
         
         internal void SetTarget(Character target)
         {
-            this._target = target;
+            enemyBB.Target = target;
             if (IsTargetInRange())
             {
-                /*
-                ChangeState(new AttackState());
-            */
-            }else if(_target != null)
+                enemyBB.isTargetInAttackRange = true;
+            }else if(enemyBB.Target != null)
             {
-                /*
-                ChangeState(new EnemyPatrolState());
-            */
-            }
-            else
-            {
-                /*
-                ChangeState(new EnemyIdleState());
-            */
+                enemyBB.isTargetInAttackRange = false;
             }
         }
         
