@@ -10,15 +10,15 @@ namespace _Game.Scripts.StateMachine
         protected bool isExitingState;
         protected bool isAnimationFinished;
         protected float startTime;
-        protected readonly TBlackboard blackboard;
+        protected readonly TBlackboard EnemyBb;
         protected readonly StateMachine<TBlackboard> stateMachine;
         
         #endregion
 
-        public BaseState(StateMachine<TBlackboard> stateMachine, TBlackboard blackboard, string animationName)
+        public BaseState(StateMachine<TBlackboard> stateMachine, TBlackboard enemyBb, string animationName)
         {
             this.stateMachine = stateMachine;
-            this.blackboard = blackboard;
+            this.EnemyBb = enemyBb;
             this.animationName = animationName;
         }
         
@@ -28,14 +28,14 @@ namespace _Game.Scripts.StateMachine
             isAnimationFinished = false;
             isExitingState = false;
             startTime = Time.time;
-            blackboard.animator.SetTrigger(animationName);
+            EnemyBb.animator.SetTrigger(animationName);
         }
 
         public virtual void Exit()
         {
             isExitingState = true;
             if(!isAnimationFinished) isAnimationFinished = true;
-            blackboard.animator.ResetTrigger(animationName);
+            EnemyBb.animator.ResetTrigger(animationName);
         }
 
         public virtual void StateUpdate()

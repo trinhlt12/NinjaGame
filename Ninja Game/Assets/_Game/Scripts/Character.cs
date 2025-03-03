@@ -1,3 +1,4 @@
+using _Game.Scripts.StateMachine;
 using UnityEngine;
 
 namespace _Game.Scripts
@@ -7,7 +8,7 @@ namespace _Game.Scripts
         #region VARIABLES
     
         [SerializeField] private Animator animator;
-
+        
         private float _hp;
         private string _currentAnimName;
         private bool IsDead => _hp <= 0;
@@ -23,6 +24,7 @@ namespace _Game.Scripts
         public virtual void OnInit()
         {
             _hp = 100;
+
         }
 
         protected virtual void OnDespawn()

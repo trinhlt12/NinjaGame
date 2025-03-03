@@ -10,13 +10,14 @@ namespace _Game.Scripts
     {
         #region VARIABLES
         [SerializeField] private float attackRange;
-        [SerializeField] private float moveSpeed;
         [SerializeField] private Rigidbody2D rb;
+        [SerializeField] private EnemyBlackboard enemyBB;
         
-        private IState _currentState;
         private bool _isRight = true;
         private Character _target;
-
+        
+        private StateMachine<EnemyBlackboard> _enemyStateMachine;
+        
         public Character Target => _target;
 
         #endregion
@@ -25,14 +26,21 @@ namespace _Game.Scripts
 
         private void Update()
         {
-            _currentState?.OnExecute(this);
+            _enemyStateMachine.CurrentState.StateUpdate();
+        }
+        
+        private void FixedUpdate()
+        {
+            _enemyStateMachine.CurrentState.StateFixedUpdate();
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.CompareTag("EnemyWall"))
             {
+                /*
                 ChangeState(new EnemyIdleState());
+                */
                 ChangeDirection(!_isRight);
             }
         }
@@ -40,11 +48,13 @@ namespace _Game.Scripts
         #endregion
         
         #region INHERITED FUNCTIONS
-        
+
         public override void OnInit()
         {
             base.OnInit();
-            ChangeState(new EnemyIdleState());
+
+            _enemyStateMachine = new StateMachine<EnemyBlackboard>();
+            _enemyStateMachine.InitializeStateMachine(new EnemyIdleState(_enemyStateMachine, enemyBB, "idle"));
         }
 
         protected override void OnDespawn()
@@ -68,18 +78,18 @@ namespace _Game.Scripts
         
         //Movements
 
-        public void Moving()
+        /*public void Moving()
         {
             ChangeAnim("run");
             
             rb.velocity = transform.right * moveSpeed;
-        }
+        }*/
 
-        public void StopMoving()
+        /*public void StopMoving()
         {
             ChangeAnim("idle");
             rb.velocity = Vector2.zero;
-        }
+        }*/
 
         public void ChangeDirection(bool isRight)
         {
@@ -105,25 +115,24 @@ namespace _Game.Scripts
             this._target = target;
             if (IsTargetInRange())
             {
+                /*
                 ChangeState(new AttackState());
+            */
             }else if(_target != null)
             {
+                /*
                 ChangeState(new EnemyPatrolState());
+            */
             }
             else
             {
+                /*
                 ChangeState(new EnemyIdleState());
+            */
             }
         }
         
         #endregion
-        
-        public void ChangeState(IState newState)
-        {
-            _currentState?.OnExit(this);
-            _currentState = newState;
-            _currentState.OnEnter(this);
-        }
 
         public void PlayAnimation(string animationName)
         {

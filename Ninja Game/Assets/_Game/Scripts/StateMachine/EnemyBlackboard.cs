@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _Game.Scripts.StateMachine
 {
@@ -6,12 +7,15 @@ namespace _Game.Scripts.StateMachine
     {
         public float attackRange;
         public float moveSpeed;
-        public  Rigidbody2D rb;
-        
-        public IState _currentState;
-        public bool _isRight = true;
-        public Character _target;
+        [FormerlySerializedAs("_isRight")] public bool isRight = true;
+        [FormerlySerializedAs("_target")] public Character target;
 
-        public Character Target => _target;
+        public Character Target => target;
+        public EnemyBlackboard(Enemy enemy)
+        {
+            this.enemy = enemy;
+            this.rigidbody2D = enemy.GetComponent<Rigidbody2D>();
+            this.animator = enemy.GetComponent<Animator>();
+        }
     }
 }

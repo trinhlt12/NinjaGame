@@ -12,7 +12,7 @@ namespace _Game.Scripts.StateMachine
         
         #region INHERITED METHODS
 
-        public AttackState(StateMachine<EnemyBlackboard> stateMachine, EnemyBlackboard blackboard, string animationName) : base(stateMachine, blackboard, animationName)
+        public AttackState(StateMachine<EnemyBlackboard> stateMachine, EnemyBlackboard enemyBb, string animationName) : base(stateMachine, enemyBb, animationName)
         {
         }
 
@@ -20,12 +20,12 @@ namespace _Game.Scripts.StateMachine
         {
             base.Enter();
             _timer = 0;
-            if(blackboard.enemy.Target != null)
+            if(EnemyBb.enemy.Target != null)
             {
                 //rotate enemy to face the player
-                blackboard.enemy.ChangeDirection(blackboard.enemy.Target.transform.position.x > blackboard.enemy.transform.position.x);
-                blackboard.enemy.StopMoving();
-                blackboard.enemy.Attack();
+                EnemyBb.enemy.ChangeDirection(EnemyBb.enemy.Target.transform.position.x > EnemyBb.enemy.transform.position.x);
+                EnemyBb.rigidbody2D.velocity = Vector2.zero;
+                EnemyBb.enemy.Attack();
             }
         }
 
@@ -35,7 +35,7 @@ namespace _Game.Scripts.StateMachine
             _timer += Time.deltaTime;
             if (_timer >= 1.5f)
             {
-                stateMachine.ChangeState(new EnemyPatrolState(stateMachine, blackboard, "Patrol"));
+                stateMachine.ChangeState(new EnemyRunState(stateMachine, EnemyBb, "Patrol"));
             }
         }
 

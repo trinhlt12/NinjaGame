@@ -3,24 +3,9 @@ using UnityEngine;
 
 namespace _Game.Scripts.StateMachine
 {
-    public class StateMachine<T> : MonoBehaviour where T : Blackboard
+    public class StateMachine<T>  where T : Blackboard
     {
-        public BaseState<T> CurrentState { get; private set; }
-
-        private void Start()
-        {
-            
-        }
-
-        private void Update()
-        {
-            CurrentState?.StateUpdate();
-        }
-        
-        private void FixedUpdate()
-        {
-            CurrentState?.StateFixedUpdate();
-        }
+        public BaseState<T> CurrentState { get; set; }
 
         public void InitializeStateMachine(BaseState<T> initialState)
         {
