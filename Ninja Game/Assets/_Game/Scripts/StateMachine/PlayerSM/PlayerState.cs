@@ -1,8 +1,8 @@
-namespace _Game.Scripts.StateMachine
+namespace _Game.Scripts.StateMachine.PlayerSM
 {
     public class PlayerState : BaseState<PlayerBlackboard>
     {
-        public PlayerState(StateMachine<PlayerBlackboard> stateMachine, PlayerBlackboard enemyBb, string animationName) : base(stateMachine, enemyBb, animationName)
+        public PlayerState(StateMachine<PlayerBlackboard> stateMachine, PlayerBlackboard playerBb, string animationName) : base(stateMachine, playerBb, animationName)
         {
         }
 

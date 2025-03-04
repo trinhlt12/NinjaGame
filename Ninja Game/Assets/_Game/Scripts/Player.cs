@@ -1,28 +1,11 @@
+using _Game.Scripts.StateMachine;
+using _Game.Scripts.StateMachine.PlayerSM;
 using UnityEngine;
 
 namespace _Game.Scripts
 {
     public partial class Player : Character
     {
-        #region INHERITED-FUNCTIONS
-
-        public override void OnInit()
-        {
-            base.OnInit();
-
-            _isDead = false;
-            _isAttacking = false;
-            _isFalling = false;
-            _isJumping = false;
-            _currentMovingPlatform = null;
-
-            transform.position = _savePoint;
-
-            ChangeAnim("idle");
-        }
-
-        #endregion
-
         #region VARIABLES
 
         [SerializeField] private Rigidbody2D rb;
@@ -30,9 +13,9 @@ namespace _Game.Scripts
         [SerializeField] private float speed;
         [SerializeField] private float jumpForce;
         [SerializeField] private CapsuleCollider2D playerCollider;
+        [SerializeField] private PlayerBlackboard playerBB;
 
         private bool _isIdle;
-        private bool _isGrounded;
         private bool _isJumping;
         private bool _isAttacking;
         private bool _isRunning;
@@ -47,25 +30,34 @@ namespace _Game.Scripts
 
         private Vector3 _savePoint;
 
-        private IMovingPlatform _currentMovingPlatform;
+        private StateMachine<PlayerBlackboard> _playerStateMachine;
+
+        #endregion
+        
+        #region INHERITED-FUNCTIONS
+
+        public override void OnInit()
+        {
+            base.OnInit();
+            _playerStateMachine = new StateMachine<PlayerBlackboard>();
+            _playerStateMachine.InitializeStateMachine(new PlayerIdleState(_playerStateMachine, playerBB, "idle"));
+            SetSavePoint(transform.position);
+            transform.position = _savePoint;
+        }
 
         #endregion
 
         #region UNITY-FUNCTIONS
 
-        private void Start()
-        {
-            SetSavePoint(transform.position);
-        }
-
         private void Update()
         {
-            PlayerUpdate();
+            playerBB.isGrounded = CheckIfGrounded();
+            _playerStateMachine.CurrentState.StateUpdate();
         }
 
         private void FixedUpdate()
         {
-            PlayerFixedUpdate();
+            _playerStateMachine.CurrentState.StateFixedUpdate();
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -89,14 +81,14 @@ namespace _Game.Scripts
         private void OnDrawGizmos()
         {
             Debug.DrawLine(transform.position, transform.position + Vector3.down * playerCollider.size.y / 2,
-                _isGrounded ? Color.green : Color.red);
+                playerBB.isGrounded ? Color.green : Color.red);
         }
 
         #endregion
 
         #region CUSTOM-FUNCTIONS
 
-        private void PlayerUpdate()
+        /*private void PlayerUpdate()
         {
             _isGrounded = CheckIfGrounded();
 
@@ -108,9 +100,9 @@ namespace _Game.Scripts
                 if (!_isGrounded) return;
                 Attack();
             }
-        }
+        }*/
 
-        private void PlayerFixedUpdate()
+        /*private void PlayerFixedUpdate()
         {
             if (_isDead) return;
 
@@ -151,7 +143,7 @@ namespace _Game.Scripts
                 ChangeAnim("idle");
                 rb.velocity = new Vector2(0, rb.velocity.y);
             }
-        }
+        }*/
 
         private bool CheckIfGrounded()
         {
@@ -161,13 +153,13 @@ namespace _Game.Scripts
 
             if (hit.collider == null)
             {
-                _currentMovingPlatform = null;
+                playerBB.currentMovingPlatform = null;
                 return false;
             }
 
             if (hit.collider.gameObject.TryGetComponent(out IMovingPlatform movingPlatform))
             {
-                _currentMovingPlatform = movingPlatform;
+                playerBB.currentMovingPlatform = movingPlatform;
                 _platformOffset = transform.position - movingPlatform.Position;
             }
 
@@ -175,7 +167,7 @@ namespace _Game.Scripts
         }
 
         // ReSharper disable Unity.PerformanceAnalysis
-        private void Attack()
+        /*private void Attack()
         {
             rb.velocity = Vector2.zero;
             if (_isAttacking) return;
@@ -183,25 +175,25 @@ namespace _Game.Scripts
             ChangeAnim("attack");
             //reset attack
             Invoke(nameof(ResetAttack), 0.5f);
-        }
+        }*/
 
-        private void ResetAttack()
+        /*private void ResetAttack()
         {
             _isAttacking = false;
             ChangeAnim("idle");
-        }
+        }*/
 
-        private void Throw()
+        /*private void Throw()
         {
             ChangeAnim("throw");
-        }
+        }*/
 
-        private void Jump()
+        /*private void Jump()
         {
             ChangeAnim("jump");
             rb.AddForce(jumpForce * Vector2.up);
             _isJumping = false;
-        }
+        }*/
 
         public void SetSavePoint(Vector3 savePoint)
         {

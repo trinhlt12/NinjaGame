@@ -1,3 +1,4 @@
+using _Game.Scripts.StateMachine.EnemySM;
 using UnityEngine;
 
 namespace _Game.Scripts.StateMachine
@@ -16,7 +17,7 @@ namespace _Game.Scripts.StateMachine
         
         #region INHERITED METHODS
 
-        public EnemyRunState(StateMachine<EnemyBlackboard> stateMachine, EnemyBlackboard enemyBb, string animationName) : base(stateMachine, enemyBb, animationName)
+        public EnemyRunState(StateMachine<EnemyBlackboard> stateMachine, EnemyBlackboard blackBoard, string animationName) : base(stateMachine, blackBoard, animationName)
         {
             
         }
@@ -38,14 +39,14 @@ namespace _Game.Scripts.StateMachine
             _timer += Time.deltaTime;
 
             //if the player is within the enemy's sight
-            if (EnemyBb.Target != null)
+            if (BlackBoard.Target != null)
             {
-                if (EnemyBb.enemy.IsTargetInRange())
+                if (BlackBoard.enemy.IsTargetInRange())
                 {
-                    stateMachine.ChangeState(new EnemyAttackState(stateMachine, EnemyBb, "attack"));
+                    stateMachine.ChangeState(new EnemyAttackState(stateMachine, BlackBoard, "attack"));
                 }
                 
-                EnemyBb.enemy.ChangeDirection(EnemyBb.Target.transform.position.x > EnemyBb.transform.position.x);
+                BlackBoard.enemy.ChangeDirection(BlackBoard.Target.transform.position.x > BlackBoard.transform.position.x);
                 Move();
             }
             else
@@ -57,7 +58,7 @@ namespace _Game.Scripts.StateMachine
                 }
                 else
                 {
-                    stateMachine.ChangeState(new EnemyIdleState(stateMachine,EnemyBb, "idle"));
+                    stateMachine.ChangeState(new EnemyIdleState(stateMachine,BlackBoard, "idle"));
                 }
             }
         }
@@ -72,12 +73,12 @@ namespace _Game.Scripts.StateMachine
 
         private void Move()
         {
-            EnemyBb.rigidbody2D.velocity = EnemyBb.enemy.transform.right * moveSpeed;
+            BlackBoard.rigidbody2D.velocity = BlackBoard.enemy.transform.right * moveSpeed;
         }
         
         private void StopMove()
         {
-            EnemyBb.rigidbody2D.velocity = Vector2.zero;
+            BlackBoard.rigidbody2D.velocity = Vector2.zero;
         }
         
         

@@ -2394,6 +2394,7 @@ GameObject:
   - component: {fileID: 487651634}
   - component: {fileID: 487651633}
   - component: {fileID: 487651635}
+  - component: {fileID: 487651636}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -2552,6 +2553,33 @@ MonoBehaviour:
   speed: 300
   jumpForce: 530
   playerCollider: {fileID: 487651634}
+  playerBB: {fileID: 487651636}
+--- !u!114 &487651636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 487651630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10945f9aa12048c8901c9d6a846d595a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 1648989201}
+  rigidbody2D: {fileID: 487651633}
+  transform: {fileID: 487651632}
+  collider2D: {fileID: 487651634}
+  player: {fileID: 487651635}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  speed: 300
+  jumpForce: 530
+  playerCollider: {fileID: 487651634}
+  horizontal: 0
+  isFacingRight: 0
+  isGrounded: 0
 --- !u!1 &492126258
 GameObject:
   m_ObjectHideFlags: 0

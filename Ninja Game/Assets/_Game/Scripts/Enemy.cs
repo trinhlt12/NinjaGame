@@ -112,11 +112,6 @@ namespace _Game.Scripts
         }
         
         #endregion
-
-        public void PlayAnimation(string animationName)
-        {
-            
-            
-        }
+        
     }
 }

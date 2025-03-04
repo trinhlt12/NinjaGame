@@ -9,6 +9,5 @@ namespace _Game.Scripts.StateMachine
         public Rigidbody2D rigidbody2D;
         public Transform transform;
         public Collider2D collider2D;
-        public Enemy enemy;
     }
 }

@@ -5,6 +5,7 @@ namespace _Game.Scripts.StateMachine
 {
     public class EnemyBlackboard : Blackboard
     {
+        public Enemy enemy;
         public float attackRange;
         public float moveSpeed;
         public bool isRight = true;

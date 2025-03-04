@@ -24,7 +24,6 @@ namespace _Game.Scripts
         public virtual void OnInit()
         {
             _hp = 100;
-
         }
 
         protected virtual void OnDespawn()

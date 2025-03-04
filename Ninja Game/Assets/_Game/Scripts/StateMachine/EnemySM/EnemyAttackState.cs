@@ -1,3 +1,4 @@
+using _Game.Scripts.StateMachine.EnemySM;
 using UnityEngine;
 
 namespace _Game.Scripts.StateMachine
@@ -12,7 +13,7 @@ namespace _Game.Scripts.StateMachine
         
         #region INHERITED METHODS
 
-        public EnemyAttackState(StateMachine<EnemyBlackboard> stateMachine, EnemyBlackboard enemyBb, string animationName) : base(stateMachine, enemyBb, animationName)
+        public EnemyAttackState(StateMachine<EnemyBlackboard> stateMachine, EnemyBlackboard blackBoard, string animationName) : base(stateMachine, blackBoard, animationName)
         {
         }
 
@@ -21,11 +22,11 @@ namespace _Game.Scripts.StateMachine
             base.Enter();
             _timer = 0;
 
-            if(EnemyBb.Target != null)
+            if(BlackBoard.Target != null)
             {
                 //rotate enemy to face the player
-                EnemyBb.enemy.ChangeDirection(EnemyBb.Target.transform.position.x > EnemyBb.enemy.transform.position.x);
-                EnemyBb.rigidbody2D.velocity = Vector2.zero;
+                BlackBoard.enemy.ChangeDirection(BlackBoard.Target.transform.position.x > BlackBoard.enemy.transform.position.x);
+                BlackBoard.rigidbody2D.velocity = Vector2.zero;
                 Attack();
             }
         }
@@ -36,12 +37,12 @@ namespace _Game.Scripts.StateMachine
             _timer += Time.deltaTime;
             if (_timer >= 1.5f)
             {
-                stateMachine.ChangeState(new EnemyRunState(stateMachine, EnemyBb, "run"));
+                stateMachine.ChangeState(new EnemyRunState(stateMachine, BlackBoard, "run"));
             }
             
-            if(EnemyBb.animator.GetCurrentAnimatorStateInfo(0).IsName("attack") && EnemyBb.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f)
+            if(BlackBoard.animator.GetCurrentAnimatorStateInfo(0).IsName("attack") && BlackBoard.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f)
             {
-                stateMachine.ChangeState(new EnemyIdleState(stateMachine, EnemyBb, "idle"));
+                stateMachine.ChangeState(new EnemyIdleState(stateMachine, BlackBoard, "idle"));
             }
         }
 

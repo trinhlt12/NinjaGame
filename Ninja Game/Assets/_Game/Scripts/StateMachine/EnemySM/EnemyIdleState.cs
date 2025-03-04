@@ -1,4 +1,5 @@
 using System;
+using _Game.Scripts.StateMachine.EnemySM;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -15,7 +16,7 @@ namespace _Game.Scripts.StateMachine
         
         #region INHERITED METHODS
         
-        public EnemyIdleState(StateMachine<EnemyBlackboard> stateMachine, EnemyBlackboard enemyBb, string animationName) : base(stateMachine, enemyBb, animationName)
+        public EnemyIdleState(StateMachine<EnemyBlackboard> stateMachine, EnemyBlackboard blackBoard, string animationName) : base(stateMachine, blackBoard, animationName)
         {
             
         }
@@ -25,7 +26,7 @@ namespace _Game.Scripts.StateMachine
             base.Enter();
             _timer = 0;
             _randomTime = Random.Range(2.5f, 4f);
-            EnemyBb.rigidbody2D.velocity = Vector2.zero;
+            BlackBoard.rigidbody2D.velocity = Vector2.zero;
         }
 
         public override void StateUpdate()
@@ -34,7 +35,7 @@ namespace _Game.Scripts.StateMachine
             _timer += Time.deltaTime;
             if(_timer > _randomTime)
             {
-                stateMachine.ChangeState(new EnemyRunState(stateMachine, EnemyBb, "run"));
+                stateMachine.ChangeState(new EnemyRunState(stateMachine, BlackBoard, "run"));
             }
         }
         
