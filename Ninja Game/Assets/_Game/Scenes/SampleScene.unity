@@ -5046,6 +5046,7 @@ GameObject:
   - component: {fileID: 1474775983}
   - component: {fileID: 1474775982}
   - component: {fileID: 1474775981}
+  - component: {fileID: 1474775986}
   m_Layer: 8
   m_Name: Enemy
   m_TagString: Enemy
@@ -5180,9 +5181,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 656270915}
-  attackRange: 2
-  moveSpeed: 2.5
   rb: {fileID: 1474775981}
+  enemyBB: {fileID: 1474775986}
+  attackRange: 2
 --- !u!4 &1474775985
 Transform:
   m_ObjectHideFlags: 0
@@ -5200,6 +5201,28 @@ Transform:
   - {fileID: 86800094}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1474775986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1474775980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3299bf82829c40e1abf070c5851f0821, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 656270915}
+  rigidbody2D: {fileID: 1474775981}
+  transform: {fileID: 1474775985}
+  collider2D: {fileID: 1474775982}
+  enemy: {fileID: 1474775984}
+  attackRange: 0
+  moveSpeed: 0
+  isRight: 1
+  target: {fileID: 0}
+  isTargetInAttackRange: 0
 --- !u!1 &1498922535
 GameObject:
   m_ObjectHideFlags: 0
@@ -10662,6 +10685,63 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1001 &3426285786809660234
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3358575984189272490, guid: 97b551eacab46a040a9c42669b974e8b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.6887565
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358575984189272490, guid: 97b551eacab46a040a9c42669b974e8b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.2195933
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358575984189272490, guid: 97b551eacab46a040a9c42669b974e8b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.009358505
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358575984189272490, guid: 97b551eacab46a040a9c42669b974e8b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358575984189272490, guid: 97b551eacab46a040a9c42669b974e8b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358575984189272490, guid: 97b551eacab46a040a9c42669b974e8b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358575984189272490, guid: 97b551eacab46a040a9c42669b974e8b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358575984189272490, guid: 97b551eacab46a040a9c42669b974e8b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358575984189272490, guid: 97b551eacab46a040a9c42669b974e8b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358575984189272490, guid: 97b551eacab46a040a9c42669b974e8b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9222263084439948742, guid: 97b551eacab46a040a9c42669b974e8b, type: 3}
+      propertyPath: m_Name
+      value: Kunai
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 97b551eacab46a040a9c42669b974e8b, type: 3}
 --- !u!1001 &6581179315104814109
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10792,3 +10872,4 @@ SceneRoots:
   - {fileID: 1474775985}
   - {fileID: 2076062650}
   - {fileID: 2028019375}
+  - {fileID: 3426285786809660234}
