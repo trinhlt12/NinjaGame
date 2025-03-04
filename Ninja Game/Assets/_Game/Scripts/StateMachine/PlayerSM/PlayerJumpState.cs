@@ -30,7 +30,8 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             }
             
             BlackBoard.horizontal = Input.GetAxisRaw("Horizontal");
-
+            
+            //TODO: Mid-air movement
         }
 
         private void Jump()

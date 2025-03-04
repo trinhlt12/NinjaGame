@@ -13,6 +13,7 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         public float horizontal;
         public bool isFacingRight;
         public bool isGrounded;
+        public bool isDead;
         
         public PlayerBlackboard(Player player)
         {

@@ -19,6 +19,10 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         public override void StateUpdate()
         {
             base.StateUpdate();
+            if (BlackBoard.isDead)
+            {
+                stateMachine.ChangeState(new PlayerDieState(stateMachine, BlackBoard, "die"));
+            }
         }
         
         public override void StateFixedUpdate()

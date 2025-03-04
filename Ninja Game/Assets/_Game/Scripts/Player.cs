@@ -20,7 +20,6 @@ namespace _Game.Scripts
         private bool _isAttacking;
         private bool _isRunning;
         private bool _isFalling;
-        private bool _isDead;
 
         private float _horizontal;
         private float _vertical;
@@ -70,8 +69,10 @@ namespace _Game.Scripts
 
             if (collision.CompareTag("DeathZone"))
             {
-                _isDead = true;
+                playerBB.isDead = true;
+                /*
                 ChangeAnim("die");
+                */
 
                 Invoke(nameof(OnInit), 1f);
             }
