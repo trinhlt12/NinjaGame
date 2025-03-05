@@ -14,10 +14,14 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         public float speed;
         public float jumpForce;
         public float horizontal;
+        public float lastXVelocity;
+        public float attackCooldown = 2.0f;
+        public float lastAttackTime = -1f;
         
         public bool isFacingRight;
         public bool isGrounded;
         public bool isDead;
+        public bool isAttacking = false;
         
         public PlayerIdleState playerIdleState { get; private set; }
         public PlayerRunState playerRunState { get; private set; }

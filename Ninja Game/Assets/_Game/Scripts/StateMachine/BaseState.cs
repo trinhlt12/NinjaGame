@@ -8,7 +8,6 @@ namespace _Game.Scripts.StateMachine
         
         protected readonly string animationName;
         protected bool isExitingState;
-        protected bool isAnimationFinished;
         protected float startTime;
         protected readonly TBlackboard BlackBoard;
         protected readonly StateMachine<TBlackboard> stateMachine;
@@ -25,7 +24,6 @@ namespace _Game.Scripts.StateMachine
         
         public virtual void Enter()
         {
-            isAnimationFinished = false;
             isExitingState = false;
             startTime = Time.time;
 
@@ -38,13 +36,12 @@ namespace _Game.Scripts.StateMachine
         public virtual void Exit()
         {
             isExitingState = true;
-            if(!isAnimationFinished) isAnimationFinished = true;
             BlackBoard.animator.ResetTrigger(animationName);
         }
 
         public virtual void StateUpdate()
         {
-            TransitionChecks();
+            
         }
         
         public virtual void StateFixedUpdate()
@@ -52,14 +49,14 @@ namespace _Game.Scripts.StateMachine
             
         }
 
-        private void TransitionChecks()
+        public bool IsAnimationFinished()
         {
-            
+            AnimatorStateInfo stateInfo = BlackBoard.animator.GetCurrentAnimatorStateInfo(0);
+            return stateInfo.normalizedTime >= 1f;
         }
         
         public virtual void AnimationTrigger()
         {
-            isAnimationFinished = true;
         }
     }
 }

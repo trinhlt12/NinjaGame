@@ -12,21 +12,26 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         {
             base.Enter();
         }
-        
+
+        public override void StateUpdate()
+        {
+            base.StateUpdate();
+        }
+
         public override void StateFixedUpdate()
         {
             base.StateFixedUpdate();
+            
             BlackBoard.rigidbody2D.velocity = new Vector2(BlackBoard.horizontal * Time.fixedDeltaTime * BlackBoard.speed, 
                 BlackBoard.rigidbody2D.velocity.y);
             
-            if (BlackBoard.horizontal > 0)
+            BlackBoard.lastXVelocity = BlackBoard.rigidbody2D.velocity.x;
+            
+            if (BlackBoard.horizontal != 0)
             {
-                BlackBoard.isFacingRight = true;
+                BlackBoard.isFacingRight = BlackBoard.horizontal > 0;
             }
-            else if (BlackBoard.horizontal < 0)
-            {
-                BlackBoard.isFacingRight = false;
-            }
+
             BlackBoard.player.transform.localScale = new Vector3(BlackBoard.isFacingRight ? 1 : -1, 1, 1);
 
             

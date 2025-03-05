@@ -9,6 +9,7 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         public override void Enter()
         {
             base.Enter();
+            BlackBoard.rigidbody2D.gravityScale = 2.5f;
         }
 
         public override void StateFixedUpdate()
@@ -18,6 +19,12 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             {
                 stateMachine.ChangeState(BlackBoard.playerIdleState);
             }
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            BlackBoard.rigidbody2D.gravityScale = 1;
         }
     }
 }

@@ -11,11 +11,21 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         public override void Enter()
         {
             base.Enter();
+
+            BlackBoard.isAttacking = true;
+            
+            Attack();
         }
 
         public override void StateUpdate()
         {
             base.StateUpdate();
+            if (IsAnimationFinished())
+            {
+                BlackBoard.isAttacking = false;
+                stateMachine.ChangeState(BlackBoard.playerIdleState);
+                return;
+            }
         }
 
         public override void StateFixedUpdate()
@@ -27,6 +37,12 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         public override void Exit()
         {
             base.Exit();
+        }
+        
+
+        private void Attack()
+        {
+            
         }
     }
 }

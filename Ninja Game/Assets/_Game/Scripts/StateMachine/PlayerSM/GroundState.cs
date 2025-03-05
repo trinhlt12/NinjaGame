@@ -16,7 +16,7 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         public override void StateUpdate()
         {
             base.StateUpdate();
-            if(!BlackBoard.isGrounded) return;
+            if(!BlackBoard.isGrounded || BlackBoard.isAttacking) return;
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 stateMachine.ChangeState(BlackBoard.playerJumpState);
@@ -30,7 +30,8 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             }
             
             BlackBoard.horizontal = Input.GetAxisRaw("Horizontal");
-            if (Mathf.Abs(BlackBoard.horizontal) > 0.1f && stateMachine.CurrentState is not PlayerRunState)
+            if (Mathf.Abs(BlackBoard.horizontal) > 0.1f && stateMachine.CurrentState is not PlayerRunState
+                && stateMachine.CurrentState is not PlayerJumpState)
             {
                 stateMachine.ChangeState(BlackBoard.playerRunState);
                 return;
