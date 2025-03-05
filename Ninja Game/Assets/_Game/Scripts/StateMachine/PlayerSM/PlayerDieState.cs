@@ -1,5 +1,3 @@
-using UnityEditor.Timeline.Actions;
-
 namespace _Game.Scripts.StateMachine.PlayerSM
 {
     public class PlayerDieState : PlayerState

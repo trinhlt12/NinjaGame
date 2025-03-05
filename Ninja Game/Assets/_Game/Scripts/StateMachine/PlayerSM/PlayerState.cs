@@ -21,7 +21,7 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             base.StateUpdate();
             if (BlackBoard.isDead)
             {
-                stateMachine.ChangeState(new PlayerDieState(stateMachine, BlackBoard, "die"));
+                stateMachine.ChangeState(BlackBoard.playerDieState);
             }
         }
         

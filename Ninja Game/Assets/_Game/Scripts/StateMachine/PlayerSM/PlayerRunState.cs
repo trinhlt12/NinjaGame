@@ -32,7 +32,8 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             
             if (Mathf.Abs(BlackBoard.horizontal) <= 0.1f)
             {
-                stateMachine.ChangeState(new PlayerIdleState(stateMachine, BlackBoard, "idle"));
+                stateMachine.ChangeState(BlackBoard.playerIdleState);
+                return;
             }
         }
 

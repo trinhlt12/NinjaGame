@@ -50,7 +50,7 @@ namespace _Game.Scripts
             base.OnInit();
 
             _enemyStateMachine = new StateMachine<EnemyBlackboard>();
-            _enemyStateMachine.InitializeStateMachine(new EnemyIdleState(_enemyStateMachine, enemyBB, "idle"));
+            _enemyStateMachine.InitializeStateMachine(enemyBB.enemyIdleState, enemyBB);
         }
 
         protected override void OnDespawn()

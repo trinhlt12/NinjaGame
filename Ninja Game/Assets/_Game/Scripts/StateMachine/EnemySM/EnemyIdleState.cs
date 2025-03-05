@@ -35,7 +35,7 @@ namespace _Game.Scripts.StateMachine
             _timer += Time.deltaTime;
             if(_timer > _randomTime)
             {
-                stateMachine.ChangeState(new EnemyRunState(stateMachine, BlackBoard, "run"));
+                stateMachine.ChangeState(BlackBoard.enemyRunState);
             }
         }
         

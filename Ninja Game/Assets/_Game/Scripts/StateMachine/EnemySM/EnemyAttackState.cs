@@ -37,12 +37,12 @@ namespace _Game.Scripts.StateMachine
             _timer += Time.deltaTime;
             if (_timer >= 1.5f)
             {
-                stateMachine.ChangeState(new EnemyRunState(stateMachine, BlackBoard, "run"));
+                stateMachine.ChangeState(BlackBoard.enemyRunState);
             }
             
             if(BlackBoard.animator.GetCurrentAnimatorStateInfo(0).IsName("attack") && BlackBoard.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f)
             {
-                stateMachine.ChangeState(new EnemyIdleState(stateMachine, BlackBoard, "idle"));
+                stateMachine.ChangeState(BlackBoard.enemyIdleState);
             }
         }
 

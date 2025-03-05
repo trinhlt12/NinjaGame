@@ -19,18 +19,21 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             if(!BlackBoard.isGrounded) return;
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                stateMachine.ChangeState(new PlayerJumpState(stateMachine, BlackBoard, "jump"));
+                stateMachine.ChangeState(BlackBoard.playerJumpState);
+                return;
             }
 
             if (Input.GetKeyDown(KeyCode.C) || Input.GetKeyDown(KeyCode.J))
             {
-                stateMachine.ChangeState(new PlayerAttackState(stateMachine, BlackBoard, "attack"));
+                stateMachine.ChangeState(BlackBoard.playerAttackState);
+                return;
             }
             
             BlackBoard.horizontal = Input.GetAxisRaw("Horizontal");
             if (Mathf.Abs(BlackBoard.horizontal) > 0.1f && stateMachine.CurrentState is not PlayerRunState)
             {
-                stateMachine.ChangeState(new PlayerRunState(stateMachine, BlackBoard, "run"));
+                stateMachine.ChangeState(BlackBoard.playerRunState);
+                return;
             }
         }
 
@@ -39,7 +42,8 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             base.StateFixedUpdate();
             if (!BlackBoard.isGrounded && BlackBoard.rigidbody2D.velocity.y < 0)
             {
-                stateMachine.ChangeState(new PlayerFallState(stateMachine, BlackBoard, "fall"));
+                stateMachine.ChangeState(BlackBoard.playerFallState);
+                return;
             }
         }
     }

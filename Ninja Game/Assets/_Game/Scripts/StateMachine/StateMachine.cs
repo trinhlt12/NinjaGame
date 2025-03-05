@@ -7,9 +7,10 @@ namespace _Game.Scripts.StateMachine
     {
         public BaseState<T> CurrentState { get; set; }
 
-        public void InitializeStateMachine(BaseState<T> initialState)
+        public void InitializeStateMachine(BaseState<T> initialState, T blackboard)
         {
             CurrentState = initialState;
+            blackboard.InitializeStates(this);
             CurrentState.Enter();
         }
         

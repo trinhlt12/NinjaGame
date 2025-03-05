@@ -15,11 +15,32 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         public bool isGrounded;
         public bool isDead;
         
+        public PlayerIdleState playerIdleState { get; private set; }
+        public PlayerRunState playerRunState { get; private set; }
+        public PlayerJumpState playerJumpState { get; private set; }
+        public PlayerAttackState playerAttackState { get; private set; }
+        public PlayerFallState playerFallState { get; private set; }
+        public PlayerDieState playerDieState { get; private set; }
+        
         public PlayerBlackboard(Player player)
         {
             this.player = player;
             this.rigidbody2D = player.GetComponent<Rigidbody2D>();
             this.animator = player.GetComponent<Animator>();
+        }
+
+        public override void InitializeStates<T>(StateMachine<T> stateMachine)
+        {
+            base.InitializeStates(stateMachine);
+            if (stateMachine is StateMachine<PlayerBlackboard> playerStateMachine)
+            {
+                playerIdleState = new PlayerIdleState(playerStateMachine, this, "idle");
+                playerRunState = new PlayerRunState(playerStateMachine, this, "run");
+                playerJumpState = new PlayerJumpState(playerStateMachine, this, "jump");
+                playerAttackState = new PlayerAttackState(playerStateMachine, this, "attack");
+                playerFallState = new PlayerFallState(playerStateMachine, this, "fall");
+                playerDieState = new PlayerDieState(playerStateMachine, this, "die");
+            }
         }
     }
 }

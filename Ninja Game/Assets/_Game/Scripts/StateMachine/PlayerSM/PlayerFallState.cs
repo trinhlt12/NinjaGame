@@ -16,7 +16,7 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             base.StateFixedUpdate();
             if (BlackBoard.isGrounded)
             {
-                stateMachine.ChangeState(new PlayerIdleState(stateMachine, BlackBoard, "idle"));
+                stateMachine.ChangeState(BlackBoard.playerIdleState);
             }
         }
     }

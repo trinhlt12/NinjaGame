@@ -31,7 +31,18 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             
             BlackBoard.horizontal = Input.GetAxisRaw("Horizontal");
             
-            //TODO: Mid-air movement
+            Debug.Log(BlackBoard.horizontal.ToString());
+            
+            if (BlackBoard.horizontal != 0)
+            {
+                /*BlackBoard.rigidbody2D.velocity = new 
+                    Vector2(BlackBoard.horizontal * BlackBoard.speed, 
+                        BlackBoard.rigidbody2D.velocity.y);*/
+
+                BlackBoard.isFacingRight = BlackBoard.horizontal > 0;
+                BlackBoard.player.transform.localScale = new 
+                    Vector3(BlackBoard.isFacingRight ? 1 : -1, 1, 1);
+            }
         }
 
         private void Jump()

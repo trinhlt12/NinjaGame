@@ -39,7 +39,7 @@ namespace _Game.Scripts
         {
             base.OnInit();
             _playerStateMachine = new StateMachine<PlayerBlackboard>();
-            _playerStateMachine.InitializeStateMachine(new PlayerIdleState(_playerStateMachine, playerBB, "idle"));
+            _playerStateMachine.InitializeStateMachine(playerBB.playerIdleState, playerBB);
             SetSavePoint(transform.position);
             transform.position = _savePoint;
         }

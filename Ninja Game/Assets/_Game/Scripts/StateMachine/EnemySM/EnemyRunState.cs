@@ -43,7 +43,7 @@ namespace _Game.Scripts.StateMachine
             {
                 if (BlackBoard.enemy.IsTargetInRange())
                 {
-                    stateMachine.ChangeState(new EnemyAttackState(stateMachine, BlackBoard, "attack"));
+                    stateMachine.ChangeState(BlackBoard.enemyAttackState);
                 }
                 
                 BlackBoard.enemy.ChangeDirection(BlackBoard.Target.transform.position.x > BlackBoard.transform.position.x);
@@ -58,7 +58,7 @@ namespace _Game.Scripts.StateMachine
                 }
                 else
                 {
-                    stateMachine.ChangeState(new EnemyIdleState(stateMachine,BlackBoard, "idle"));
+                    stateMachine.ChangeState(BlackBoard.enemyIdleState);
                 }
             }
         }
@@ -80,8 +80,6 @@ namespace _Game.Scripts.StateMachine
         {
             BlackBoard.rigidbody2D.velocity = Vector2.zero;
         }
-        
-        
         
 
         #endregion
