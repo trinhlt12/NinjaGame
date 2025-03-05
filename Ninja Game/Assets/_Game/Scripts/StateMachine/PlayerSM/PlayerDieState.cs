@@ -1,3 +1,6 @@
+using System.Collections;
+using UnityEngine;
+
 namespace _Game.Scripts.StateMachine.PlayerSM
 {
     public class PlayerDieState : PlayerState
@@ -9,16 +12,30 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         public override void Enter()
         {
             base.Enter();
+
+            //disable movement
+            BlackBoard.player.enabled = false;
+            BlackBoard.rigidbody2D.velocity = Vector2.zero;
+
+            BlackBoard.player.StartCoroutine(Respawn());
+        }
+
+        private IEnumerator Respawn()
+        {
+            yield return new WaitForSeconds(1f);
+
+            BlackBoard.player.transform.position = BlackBoard.savePoint;
+            
+            BlackBoard.isDead = false;
+            
+            BlackBoard.player.enabled = true;
+            
+            stateMachine.ChangeState(BlackBoard.playerIdleState);
         }
 
         public override void StateUpdate()
         {
             base.StateUpdate();
-            //TODO: Check normalized time of die animation
-            // or count 1 second and then change state (?)
-            // spawn to save point
-            // split logic in player's script
-            
         }
 
         public override void StateFixedUpdate()
@@ -29,6 +46,8 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         public override void Exit()
         {
             base.Exit();
+            //Stop coroutine
+            BlackBoard.player.StopAllCoroutines();
         }
     }
 }

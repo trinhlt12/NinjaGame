@@ -1,3 +1,4 @@
+using _Game.Scripts.StateMachine.PlayerSM;
 using UnityEngine;
 
 namespace _Game.Scripts
@@ -7,8 +8,15 @@ namespace _Game.Scripts
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (!collision.CompareTag("Player")) return;
+            
             Debug.Log("Save Point");
-            collision.GetComponent<Player>().SetSavePoint(this.transform.position);
+            
+            Player player = collision.GetComponent<Player>();
+
+            if (player != null && player.playerBB != null)
+            {
+                player.playerBB.SetSavePoint(this.transform.position);
+            }
         }
     }
 }

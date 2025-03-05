@@ -13,7 +13,8 @@ namespace _Game.Scripts
         [SerializeField] private float speed;
         [SerializeField] private float jumpForce;
         [SerializeField] private CapsuleCollider2D playerCollider;
-        [SerializeField] private PlayerBlackboard playerBB;
+        
+        public PlayerBlackboard playerBB;
 
         private bool _isIdle;
         private bool _isJumping;
@@ -29,7 +30,7 @@ namespace _Game.Scripts
 
         private Vector3 _savePoint;
 
-        private StateMachine<PlayerBlackboard> _playerStateMachine;
+        public StateMachine<PlayerBlackboard> _playerStateMachine;
 
         #endregion
         
@@ -46,8 +47,8 @@ namespace _Game.Scripts
             playerBB.InitializeStates(_playerStateMachine);
             
             _playerStateMachine.InitializeStateMachine(playerBB.playerIdleState, playerBB);
-            SetSavePoint(transform.position);
-            transform.position = _savePoint;
+            playerBB.SetSavePoint(transform.position);
+            transform.position = playerBB.savePoint;
         }
 
         #endregion
@@ -76,11 +77,7 @@ namespace _Game.Scripts
             if (collision.CompareTag("DeathZone"))
             {
                 playerBB.isDead = true;
-                /*
-                ChangeAnim("die");
-                */
-
-                Invoke(nameof(OnInit), 1f);
+                _playerStateMachine.ChangeState(playerBB.playerDieState);
             }
         }
 
@@ -94,63 +91,6 @@ namespace _Game.Scripts
         #endregion
 
         #region CUSTOM-FUNCTIONS
-
-        /*private void PlayerUpdate()
-        {
-            _isGrounded = CheckIfGrounded();
-
-            //jump
-            if (Input.GetKeyDown(KeyCode.Space)) _isJumping = true;
-            //attack
-            if (Input.GetKeyDown(KeyCode.C) || Input.GetKeyDown(KeyCode.J))
-            {
-                if (!_isGrounded) return;
-                Attack();
-            }
-        }*/
-
-        /*private void PlayerFixedUpdate()
-        {
-            if (_isDead) return;
-
-            //check if player is on moving platform
-            if (_currentMovingPlatform != null && rb.velocity.magnitude <= 0.1f)
-            {
-                var newPosition = _currentMovingPlatform.Position + _platformOffset;
-                transform.position = newPosition;
-            }
-
-            rb.gravityScale = _isFalling ? 2.5f : 1.5f;
-
-            //jump
-            if (_isJumping && _isGrounded) Jump();
-            if (!_isGrounded && rb.velocity.y < 0)
-            {
-                _isFalling = true;
-                ChangeAnim("fall");
-                _isJumping = false;
-            }
-            else
-            {
-                _isFalling = false;
-            }
-
-            _horizontal = Input.GetAxisRaw("Horizontal");
-
-            //Moving / run
-            if (_isAttacking || _isFalling) return;
-            if (Mathf.Abs(_horizontal) > 0.1f)
-            {
-                ChangeAnim("run");
-                rb.velocity = new Vector2(_horizontal * Time.fixedDeltaTime * speed, rb.velocity.y);
-                transform.rotation = Quaternion.Euler(new Vector3(0, _horizontal > 0 ? 0 : 180, 0));
-            }
-            else if (_isGrounded) //idle
-            {
-                ChangeAnim("idle");
-                rb.velocity = new Vector2(0, rb.velocity.y);
-            }
-        }*/
 
         private bool CheckIfGrounded()
         {
@@ -171,40 +111,6 @@ namespace _Game.Scripts
             }
 
             return true;
-        }
-
-        // ReSharper disable Unity.PerformanceAnalysis
-        /*private void Attack()
-        {
-            rb.velocity = Vector2.zero;
-            if (_isAttacking) return;
-            _isAttacking = true;
-            ChangeAnim("attack");
-            //reset attack
-            Invoke(nameof(ResetAttack), 0.5f);
-        }*/
-
-        /*private void ResetAttack()
-        {
-            _isAttacking = false;
-            ChangeAnim("idle");
-        }*/
-
-        /*private void Throw()
-        {
-            ChangeAnim("throw");
-        }*/
-
-        /*private void Jump()
-        {
-            ChangeAnim("jump");
-            rb.AddForce(jumpForce * Vector2.up);
-            _isJumping = false;
-        }*/
-
-        public void SetSavePoint(Vector3 savePoint)
-        {
-            _savePoint = savePoint;
         }
 
         #endregion

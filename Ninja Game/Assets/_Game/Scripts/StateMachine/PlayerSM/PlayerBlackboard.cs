@@ -6,11 +6,15 @@ namespace _Game.Scripts.StateMachine.PlayerSM
     {
         public Player player;
         public LayerMask groundLayer;
-        public float speed;
-        public float jumpForce;
         public CapsuleCollider2D playerCollider;        
         public IMovingPlatform currentMovingPlatform;
+        
+        public Vector3 savePoint;
+
+        public float speed;
+        public float jumpForce;
         public float horizontal;
+        
         public bool isFacingRight;
         public bool isGrounded;
         public bool isDead;
@@ -41,6 +45,11 @@ namespace _Game.Scripts.StateMachine.PlayerSM
                 playerFallState = new PlayerFallState(playerStateMachine, this, "fall");
                 playerDieState = new PlayerDieState(playerStateMachine, this, "die");
             }
+        }
+        
+        public void SetSavePoint(Vector3 newSavePoint)
+        {
+            savePoint = newSavePoint;
         }
     }
 }
