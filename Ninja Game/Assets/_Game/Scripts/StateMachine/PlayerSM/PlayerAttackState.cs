@@ -17,21 +17,24 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             Attack();
         }
 
-        public override void StateUpdate()
+        public override UpdateStateResult StateUpdate()
         {
             base.StateUpdate();
             if (IsAnimationFinished())
             {
                 BlackBoard.isAttacking = false;
                 stateMachine.ChangeState(BlackBoard.playerIdleState);
-                return;
+                return UpdateStateResult.HasChangedState;
             }
+
+            return UpdateStateResult.Running;
         }
 
-        public override void StateFixedUpdate()
+        public override UpdateStateResult StateFixedUpdate()
         {
             base.StateFixedUpdate();
             BlackBoard.rigidbody2D.velocity = Vector2.zero;
+            return UpdateStateResult.Running;
         }
 
         public override void Exit()

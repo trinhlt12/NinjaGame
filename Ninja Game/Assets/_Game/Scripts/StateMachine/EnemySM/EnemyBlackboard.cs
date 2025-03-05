@@ -8,10 +8,11 @@ namespace _Game.Scripts.StateMachine
         public Enemy enemy;
         public float attackRange;
         public float moveSpeed;
-        public bool isRight = true;
         public Character target;
         
         public bool isTargetInAttackRange;
+        public bool isAttacking = false;
+        public bool isRight = true;
         
         public EnemyAttackState enemyAttackState { get; private set; }
         public EnemyRunState enemyRunState { get; private set; }

@@ -16,14 +16,20 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             base.Exit();
         }
 
-        public override void StateUpdate()
+        public override UpdateStateResult StateUpdate()
         {
-            base.StateUpdate();
+            return base.StateUpdate();
         }
         
-        public override void StateFixedUpdate()
+        public override UpdateStateResult StateFixedUpdate()
         {
             base.StateFixedUpdate();
+            if (!BlackBoard.isGrounded && BlackBoard.rigidbody2D.velocity.y < 0)
+            {
+                stateMachine.ChangeState(BlackBoard.playerFallState);
+                return UpdateStateResult.HasChangedState;
+            }
+            return UpdateStateResult.Running;
         }
 
         public override void AnimationTrigger()

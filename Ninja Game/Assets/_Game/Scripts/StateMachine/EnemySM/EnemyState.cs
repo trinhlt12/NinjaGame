@@ -16,19 +16,21 @@ namespace _Game.Scripts.StateMachine.EnemySM
             base.Exit();
         }
 
-        public override void StateUpdate()
+        public override UpdateStateResult StateUpdate()
         {
             base.StateUpdate();
-            if (BlackBoard.target != null && !BlackBoard.enemy.IsTargetInRange())
+            if (BlackBoard.target != null && !BlackBoard.enemy.IsTargetInRange() 
+                && stateMachine.CurrentState != BlackBoard.enemyRunState)
             {
                 stateMachine.ChangeState(BlackBoard.enemyRunState);
-                return;
+                return UpdateStateResult.HasChangedState;
             }
+            return UpdateStateResult.Running;
         }
         
-        public override void StateFixedUpdate()
+        public override UpdateStateResult StateFixedUpdate()
         {
-            base.StateFixedUpdate();
+            return base.StateFixedUpdate();
         }
 
         public override void AnimationTrigger()

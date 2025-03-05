@@ -20,11 +20,13 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             base.Enter();
         }
 
-        public override void StateFixedUpdate()
+        public override UpdateStateResult StateFixedUpdate()
         {
             base.StateFixedUpdate();
             
             BlackBoard.player.transform.localScale = new Vector3(BlackBoard.isFacingRight ? 1 : -1, 1, 1);
+
+            return UpdateStateResult.Running;
         }
 
         public override void Exit()

@@ -20,6 +20,7 @@ namespace _Game.Scripts.StateMachine
         public override void Enter()
         {
             base.Enter();
+            BlackBoard.isAttacking = true;
             _timer = 0;
 
             if(BlackBoard.Target != null)
@@ -30,7 +31,7 @@ namespace _Game.Scripts.StateMachine
             }
         }
 
-        public override void StateUpdate()
+        public override UpdateStateResult StateUpdate()
         {
             base.StateUpdate();
             _timer += Time.deltaTime;
@@ -39,22 +40,25 @@ namespace _Game.Scripts.StateMachine
                 if (_timer >= 1.5f)
                 {
                     stateMachine.ChangeState(BlackBoard.enemyRunState);
-                    return;
+                    return UpdateStateResult.HasChangedState;
                 }
             }
               
             if(IsAnimationFinished())
             {
+                BlackBoard.isAttacking = false;
                 stateMachine.ChangeState(BlackBoard.enemyIdleState);
-                return;
+                return UpdateStateResult.HasChangedState;
             }
-            
+
+            return UpdateStateResult.Running;
         }
 
-        public override void StateFixedUpdate()
+        public override UpdateStateResult StateFixedUpdate()
         {
             base.StateFixedUpdate();
             BlackBoard.rigidbody2D.velocity = Vector2.zero;
+            return UpdateStateResult.Running;
         }
 
         #endregion

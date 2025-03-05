@@ -12,13 +12,16 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             BlackBoard.rigidbody2D.gravityScale = 2.5f;
         }
 
-        public override void StateFixedUpdate()
+        public override UpdateStateResult StateFixedUpdate()
         {
             base.StateFixedUpdate();
             if (BlackBoard.isGrounded)
             {
                 stateMachine.ChangeState(BlackBoard.playerIdleState);
+                return UpdateStateResult.HasChangedState;
             }
+
+            return UpdateStateResult.Running;
         }
 
         public override void Exit()

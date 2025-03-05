@@ -29,26 +29,28 @@ namespace _Game.Scripts.StateMachine
             BlackBoard.rigidbody2D.velocity = Vector2.zero;
         }
 
-        public override void StateUpdate()
+        public override UpdateStateResult StateUpdate()
         {
             base.StateUpdate();
             _timer += Time.deltaTime;
             if(_timer > _randomTime)
             {
                 stateMachine.ChangeState(BlackBoard.enemyRunState);
-                return;
+                return UpdateStateResult.HasChangedState;
             }
 
-            if (BlackBoard.enemy.IsTargetInRange())
+            if (BlackBoard.enemy.IsTargetInRange() && !BlackBoard.isAttacking)
             {
                 stateMachine.ChangeState(BlackBoard.enemyAttackState);
-                return;
+                return UpdateStateResult.HasChangedState;
             }
+
+            return UpdateStateResult.Running;
         }
         
-        public override void StateFixedUpdate()
+        public override UpdateStateResult StateFixedUpdate()
         {
-            base.StateFixedUpdate();
+            return base.StateFixedUpdate();
         }
 
         public override void Exit()

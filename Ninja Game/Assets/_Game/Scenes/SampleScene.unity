@@ -2607,14 +2607,16 @@ MonoBehaviour:
     m_Bits: 8
   playerCollider: {fileID: 487651634}
   savePoint: {x: 0, y: 0, z: 0}
-  currentDirection: {x: 0, y: 0, z: 0}
   speed: 300
-  jumpForce: 530
+  jumpForce: 10
   horizontal: 0
   lastXVelocity: 0
+  attackCooldown: 0
+  lastAttackTime: 0
   isFacingRight: 0
   isGrounded: 0
   isDead: 0
+  isAttacking: 0
 --- !u!1 &492126258
 GameObject:
   m_ObjectHideFlags: 0
@@ -5283,9 +5285,10 @@ MonoBehaviour:
   enemy: {fileID: 1474775984}
   attackRange: 0
   moveSpeed: 0
-  isRight: 1
   target: {fileID: 0}
   isTargetInAttackRange: 0
+  isAttacking: 0
+  isRight: 1
 --- !u!1 &1498922535
 GameObject:
   m_ObjectHideFlags: 0

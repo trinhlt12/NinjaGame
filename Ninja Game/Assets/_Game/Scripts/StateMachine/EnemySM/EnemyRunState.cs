@@ -33,10 +33,16 @@ namespace _Game.Scripts.StateMachine
             _timer = 0;
         }
 
-        public override void StateUpdate()
+        public override UpdateStateResult StateUpdate()
         {
-            base.StateUpdate();
             _timer += Time.deltaTime;
+
+            UpdateStateResult parentUpdateResult = base.StateUpdate();
+
+            if(parentUpdateResult == UpdateStateResult.HasChangedState)
+            {
+                return UpdateStateResult.HasChangedState;
+            }
 
             //if the player is within the enemy's sight
             if (BlackBoard.Target != null)
@@ -44,7 +50,7 @@ namespace _Game.Scripts.StateMachine
                 if (BlackBoard.enemy.IsTargetInRange())
                 {
                     stateMachine.ChangeState(BlackBoard.enemyAttackState);
-                    return;
+                    return UpdateStateResult.HasChangedState;
                 }
                 
                 BlackBoard.enemy.ChangeDirection(BlackBoard.Target.transform.position.x > BlackBoard.transform.position.x);
@@ -60,9 +66,10 @@ namespace _Game.Scripts.StateMachine
                 else
                 {
                     stateMachine.ChangeState(BlackBoard.enemyIdleState);
-                    return;
+                    return UpdateStateResult.HasChangedState;
                 }
             }
+            return UpdateStateResult.Running;
         }
 
         public void OnExit(Enemy enemy)

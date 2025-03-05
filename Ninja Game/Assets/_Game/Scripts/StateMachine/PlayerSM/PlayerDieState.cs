@@ -33,14 +33,14 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             stateMachine.ChangeState(BlackBoard.playerIdleState);
         }
 
-        public override void StateUpdate()
+        public override UpdateStateResult StateUpdate()
         {
-            base.StateUpdate();
+            return base.StateUpdate();
         }
 
-        public override void StateFixedUpdate()
+        public override UpdateStateResult StateFixedUpdate()
         {
-            base.StateFixedUpdate();
+            return base.StateFixedUpdate();
         }
         
         public override void Exit()

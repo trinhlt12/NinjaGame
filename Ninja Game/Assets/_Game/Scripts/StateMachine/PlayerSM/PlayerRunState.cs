@@ -13,19 +13,17 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             base.Enter();
         }
 
-        public override void StateUpdate()
+        public override UpdateStateResult StateUpdate()
         {
-            base.StateUpdate();
+            return base.StateUpdate();
         }
 
-        public override void StateFixedUpdate()
+        public override UpdateStateResult StateFixedUpdate()
         {
             base.StateFixedUpdate();
             
             BlackBoard.rigidbody2D.velocity = new Vector2(BlackBoard.horizontal * Time.fixedDeltaTime * BlackBoard.speed, 
                 BlackBoard.rigidbody2D.velocity.y);
-            
-            BlackBoard.lastXVelocity = BlackBoard.rigidbody2D.velocity.x;
             
             if (BlackBoard.horizontal != 0)
             {
@@ -38,8 +36,10 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             if (Mathf.Abs(BlackBoard.horizontal) <= 0.1f)
             {
                 stateMachine.ChangeState(BlackBoard.playerIdleState);
-                return;
+                return UpdateStateResult.HasChangedState;
             }
+
+            return UpdateStateResult.Running;
         }
 
         public override void Exit()

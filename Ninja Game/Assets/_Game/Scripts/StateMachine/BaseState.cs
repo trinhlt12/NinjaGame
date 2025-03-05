@@ -39,17 +39,17 @@ namespace _Game.Scripts.StateMachine
             BlackBoard.animator.ResetTrigger(animationName);
         }
 
-        public virtual void StateUpdate()
+        public virtual UpdateStateResult StateUpdate()
         {
-            
+            return UpdateStateResult.Running;
         }
         
-        public virtual void StateFixedUpdate()
+        public virtual UpdateStateResult StateFixedUpdate()
         {
-            
+            return UpdateStateResult.Running;
         }
 
-        public bool IsAnimationFinished()
+        protected bool IsAnimationFinished()
         {
             AnimatorStateInfo stateInfo = BlackBoard.animator.GetCurrentAnimatorStateInfo(0);
             return stateInfo.normalizedTime >= 1f;
@@ -58,5 +58,12 @@ namespace _Game.Scripts.StateMachine
         public virtual void AnimationTrigger()
         {
         }
+
+    }
+
+    public enum UpdateStateResult
+    { 
+        HasChangedState,
+        Running,
     }
 }

@@ -17,6 +17,7 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         public float lastXVelocity;
         public float attackCooldown = 2.0f;
         public float lastAttackTime = -1f;
+        public float airSpeed = 20;
         
         public bool isFacingRight;
         public bool isGrounded;
