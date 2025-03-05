@@ -19,6 +19,11 @@ namespace _Game.Scripts.StateMachine.EnemySM
         public override void StateUpdate()
         {
             base.StateUpdate();
+            if (BlackBoard.target != null && !BlackBoard.enemy.IsTargetInRange())
+            {
+                stateMachine.ChangeState(BlackBoard.enemyRunState);
+                return;
+            }
         }
         
         public override void StateFixedUpdate()

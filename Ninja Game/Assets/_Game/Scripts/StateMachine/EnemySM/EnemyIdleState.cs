@@ -36,6 +36,13 @@ namespace _Game.Scripts.StateMachine
             if(_timer > _randomTime)
             {
                 stateMachine.ChangeState(BlackBoard.enemyRunState);
+                return;
+            }
+
+            if (BlackBoard.enemy.IsTargetInRange())
+            {
+                stateMachine.ChangeState(BlackBoard.enemyAttackState);
+                return;
             }
         }
         

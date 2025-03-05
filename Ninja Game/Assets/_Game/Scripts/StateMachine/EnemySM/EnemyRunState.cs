@@ -44,6 +44,7 @@ namespace _Game.Scripts.StateMachine
                 if (BlackBoard.enemy.IsTargetInRange())
                 {
                     stateMachine.ChangeState(BlackBoard.enemyAttackState);
+                    return;
                 }
                 
                 BlackBoard.enemy.ChangeDirection(BlackBoard.Target.transform.position.x > BlackBoard.transform.position.x);
@@ -59,6 +60,7 @@ namespace _Game.Scripts.StateMachine
                 else
                 {
                     stateMachine.ChangeState(BlackBoard.enemyIdleState);
+                    return;
                 }
             }
         }

@@ -26,7 +26,6 @@ namespace _Game.Scripts.StateMachine
             {
                 //rotate enemy to face the player
                 BlackBoard.enemy.ChangeDirection(BlackBoard.Target.transform.position.x > BlackBoard.enemy.transform.position.x);
-                BlackBoard.rigidbody2D.velocity = Vector2.zero;
                 Attack();
             }
         }
@@ -35,20 +34,27 @@ namespace _Game.Scripts.StateMachine
         {
             base.StateUpdate();
             _timer += Time.deltaTime;
-            if (_timer >= 1.5f)
+            if (BlackBoard.target == null)
             {
-                stateMachine.ChangeState(BlackBoard.enemyRunState);
+                if (_timer >= 1.5f)
+                {
+                    stateMachine.ChangeState(BlackBoard.enemyRunState);
+                    return;
+                }
             }
-            
-            if(BlackBoard.animator.GetCurrentAnimatorStateInfo(0).IsName("attack") && BlackBoard.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f)
+              
+            if(IsAnimationFinished())
             {
                 stateMachine.ChangeState(BlackBoard.enemyIdleState);
+                return;
             }
+            
         }
 
-        public void OnExit(Enemy enemy)
+        public override void StateFixedUpdate()
         {
-            throw new System.NotImplementedException();
+            base.StateFixedUpdate();
+            BlackBoard.rigidbody2D.velocity = Vector2.zero;
         }
 
         #endregion
