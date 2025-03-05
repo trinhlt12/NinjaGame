@@ -50,6 +50,11 @@ namespace _Game.Scripts
             base.OnInit();
 
             _enemyStateMachine = new StateMachine<EnemyBlackboard>();
+            if (enemyBB == null)
+            {
+                enemyBB = gameObject.AddComponent<EnemyBlackboard>();
+            }
+            enemyBB.InitializeStates(_enemyStateMachine);
             _enemyStateMachine.InitializeStateMachine(enemyBB.enemyIdleState, enemyBB);
         }
 

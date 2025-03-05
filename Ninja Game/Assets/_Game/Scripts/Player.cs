@@ -39,6 +39,12 @@ namespace _Game.Scripts
         {
             base.OnInit();
             _playerStateMachine = new StateMachine<PlayerBlackboard>();
+            if (playerBB == null)
+            {
+                playerBB = gameObject.AddComponent<PlayerBlackboard>();
+            }
+            playerBB.InitializeStates(_playerStateMachine);
+            
             _playerStateMachine.InitializeStateMachine(playerBB.playerIdleState, playerBB);
             SetSavePoint(transform.position);
             transform.position = _savePoint;
