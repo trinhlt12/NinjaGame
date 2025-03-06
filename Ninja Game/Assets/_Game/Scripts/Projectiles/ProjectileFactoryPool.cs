@@ -8,7 +8,6 @@ namespace _Game.Scripts.Projectiles
         private Queue<T> _projectilePool = new();
         private T _projectilePrefab;
         private Transform _projectileParent;
-
         public ProjectileFactoryPool(T prefab, int initialSize = 10, Transform projectileParent = null)
         {
             this._projectilePrefab = prefab;
@@ -17,6 +16,9 @@ namespace _Game.Scripts.Projectiles
             for (int i = 0; i < initialSize; i++)
             {
                 T instance = Object.Instantiate(this._projectilePrefab, this._projectileParent);
+                //Reset prefab transform to 0,0,0 to prevent it from spawning in the wrong position
+                instance.transform.position = Vector3.zero;
+                
                 instance.gameObject.SetActive(false);
                 _projectilePool.Enqueue(instance);
             }
