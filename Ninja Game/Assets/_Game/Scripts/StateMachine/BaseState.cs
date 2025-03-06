@@ -63,7 +63,7 @@ namespace _Game.Scripts.StateMachine
 
     public enum UpdateStateResult
     { 
-        HasChangedState,
-        Running,
+        HasChangedState = 0,
+        Running = 1,
     }
 }

@@ -16,8 +16,8 @@ namespace _Game.Scripts.Projectiles
             for (int i = 0; i < initialSize; i++)
             {
                 T instance = Object.Instantiate(this._projectilePrefab, this._projectileParent);
-                //Reset prefab transform to 0,0,0 to prevent it from spawning in the wrong position
-                instance.transform.position = Vector3.zero;
+                
+                instance.transform.localPosition = Vector3.zero;
                 
                 instance.gameObject.SetActive(false);
                 _projectilePool.Enqueue(instance);
