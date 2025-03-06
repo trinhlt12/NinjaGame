@@ -1,7 +1,11 @@
+using Unity.VisualScripting;
+using UnityEngine;
+
 namespace _Game.Scripts.StateMachine.PlayerSM
 {
     public class PlayerState : BaseState<PlayerBlackboard>
     {
+        private float _lastAttackTime;
         public PlayerState(StateMachine<PlayerBlackboard> stateMachine, PlayerBlackboard playerBb, string animationName) : base(stateMachine, playerBb, animationName)
         {
         }
@@ -18,7 +22,15 @@ namespace _Game.Scripts.StateMachine.PlayerSM
 
         public override UpdateStateResult StateUpdate()
         {
-            return base.StateUpdate();
+            base.StateUpdate();
+            
+            if ((Input.GetKeyDown(KeyCode.C) || Input.GetKeyDown(KeyCode.J)) && Time.time >= _lastAttackTime + BlackBoard.attackCooldown)
+            {
+                _lastAttackTime = Time.time;
+                BlackBoard.canAttack = true;
+            }
+
+            return UpdateStateResult.Running;
         }
         
         public override UpdateStateResult StateFixedUpdate()

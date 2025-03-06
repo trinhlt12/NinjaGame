@@ -1,3 +1,5 @@
+using System;
+using _Game.Scripts.Projectiles;
 using UnityEngine;
 
 namespace _Game.Scripts.StateMachine.PlayerSM
@@ -15,7 +17,7 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         public float jumpForce;
         public float horizontal;
         public float lastXVelocity;
-        public float attackCooldown = 2.0f;
+        public float attackCooldown = 1.0f;
         public float lastAttackTime = -1f;
         public float airSpeed = 20;
         
@@ -23,6 +25,11 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         public bool isGrounded;
         public bool isDead;
         public bool isAttacking = false;
+        public bool canAttack;
+        
+        public Kunai kunaiPrefab;
+        
+        public ProjectileFactoryPool<Kunai> kunaiPool;
         
         public PlayerIdleState playerIdleState { get; private set; }
         public PlayerRunState playerRunState { get; private set; }
@@ -31,6 +38,13 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         public PlayerFallState playerFallState { get; private set; }
         public PlayerDieState playerDieState { get; private set; }
         
+        public PlayerThrowState playerThrowState { get; private set; }
+
+        private void Awake()
+        {
+            kunaiPool = new ProjectileFactoryPool<Kunai>(kunaiPrefab, 10);
+        }
+
         public PlayerBlackboard(Player player)
         {
             this.player = player;
@@ -49,6 +63,7 @@ namespace _Game.Scripts.StateMachine.PlayerSM
                 playerAttackState = new PlayerAttackState(playerStateMachine, this, "attack");
                 playerFallState = new PlayerFallState(playerStateMachine, this, "fall");
                 playerDieState = new PlayerDieState(playerStateMachine, this, "die");
+                playerThrowState = new PlayerThrowState(playerStateMachine, this, "throw");
             }
         }
         

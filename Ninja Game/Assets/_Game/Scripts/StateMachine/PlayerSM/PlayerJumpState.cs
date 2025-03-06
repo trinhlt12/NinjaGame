@@ -24,19 +24,8 @@ namespace _Game.Scripts.StateMachine.PlayerSM
 
         public override UpdateStateResult StateFixedUpdate()
         {
-            base.StateFixedUpdate();
+            return base.StateFixedUpdate();
             
-            BlackBoard.horizontal = Input.GetAxisRaw("Horizontal");
-            
-            if (BlackBoard.horizontal != 0)
-            {
-                BlackBoard.isFacingRight = BlackBoard.horizontal > 0;
-                BlackBoard.player.transform.localScale = new Vector3(BlackBoard.isFacingRight ? 1 : -1, 1, 1);
-
-                BlackBoard.rigidbody2D.AddForce(Vector2.right * (BlackBoard.airSpeed * BlackBoard.horizontal), ForceMode2D.Force);
-            }
-
-            return UpdateStateResult.Running;
         }
 
         private void Jump()

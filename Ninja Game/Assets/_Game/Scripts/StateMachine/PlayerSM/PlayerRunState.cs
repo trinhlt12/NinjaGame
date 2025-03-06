@@ -20,7 +20,12 @@ namespace _Game.Scripts.StateMachine.PlayerSM
 
         public override UpdateStateResult StateFixedUpdate()
         {
-            base.StateFixedUpdate();
+            var stateResult = base.StateFixedUpdate();
+            
+            if (stateResult == UpdateStateResult.HasChangedState)
+            {
+                return UpdateStateResult.HasChangedState;
+            }
             
             BlackBoard.rigidbody2D.velocity = new Vector2(BlackBoard.horizontal * Time.fixedDeltaTime * BlackBoard.speed, 
                 BlackBoard.rigidbody2D.velocity.y);

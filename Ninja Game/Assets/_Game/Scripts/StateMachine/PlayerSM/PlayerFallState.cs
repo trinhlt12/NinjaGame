@@ -1,6 +1,7 @@
+// ReSharper disable All
 namespace _Game.Scripts.StateMachine.PlayerSM
 {
-    public class PlayerFallState : PlayerState
+    public class PlayerFallState : AirState
     {
         public PlayerFallState(StateMachine<PlayerBlackboard> stateMachine, PlayerBlackboard playerBb, string animationName) : base(stateMachine, playerBb, animationName)
         {
@@ -12,15 +13,20 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             BlackBoard.rigidbody2D.gravityScale = 2.5f;
         }
 
+        public override UpdateStateResult StateUpdate()
+        {
+            return base.StateUpdate();
+            
+        }
+
         public override UpdateStateResult StateFixedUpdate()
         {
             base.StateFixedUpdate();
-            if (BlackBoard.isGrounded)
+            /*if (BlackBoard.isGrounded)
             {
                 stateMachine.ChangeState(BlackBoard.playerIdleState);
                 return UpdateStateResult.HasChangedState;
-            }
-
+            }*/
             return UpdateStateResult.Running;
         }
 

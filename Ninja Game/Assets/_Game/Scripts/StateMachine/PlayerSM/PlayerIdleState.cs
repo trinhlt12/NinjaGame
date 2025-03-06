@@ -24,6 +24,8 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         {
             base.StateFixedUpdate();
             
+            BlackBoard.rigidbody2D.velocity = Vector2.zero;
+            
             BlackBoard.player.transform.localScale = new Vector3(BlackBoard.isFacingRight ? 1 : -1, 1, 1);
 
             return UpdateStateResult.Running;

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using _Game.Scripts.StateMachine;
 using _Game.Scripts.StateMachine.PlayerSM;
 using UnityEngine;
@@ -84,9 +85,27 @@ namespace _Game.Scripts
 
         private void OnDrawGizmos()
         {
-            Debug.DrawLine(transform.position, transform.position + Vector3.down * playerCollider.size.y / 2,
+            if (playerCollider == null) return;
+
+            var colliderHeight = playerCollider.size.y;
+            var colliderWidth = playerCollider.size.x;
+
+            Vector2 originMiddle = transform.position;
+            Vector2 originLeft = originMiddle + Vector2.left * (colliderWidth / 2) * 0.5f;
+            Vector2 originRight = originMiddle + Vector2.right * (colliderWidth / 2) * 0.5f;
+
+            float rayLength = colliderHeight / 2;
+    
+
+            /*Debug.DrawLine(originMiddle, originMiddle + Vector2.down * rayLength, 
+                playerBB.isGrounded ? Color.green : Color.red);*/
+            Debug.DrawLine(originLeft, originLeft + Vector2.down * rayLength, 
                 playerBB.isGrounded ? Color.green : Color.red);
+            Debug.DrawLine(originRight, originRight + Vector2.down * rayLength,
+                playerBB.isGrounded ? Color.green : Color.red);
+            
         }
+
 
         #endregion
 
@@ -95,22 +114,35 @@ namespace _Game.Scripts
         private bool CheckIfGrounded()
         {
             var colliderHeight = playerCollider.size.y;
+            var colliderWidth = playerCollider.size.x;
+            
+            Vector2 originMiddle = transform.position;
+            Vector2 originLeft = originMiddle + Vector2.left * ((colliderWidth / 2) * 0.5f);
+            Vector2 originRight = originMiddle + Vector2.right * ((colliderWidth / 2) * 0.5f);
 
-            var hit = Physics2D.Raycast(transform.position, Vector2.down, colliderHeight / 2 + 0.5f, groundLayer);
+            /*
+            var hitMiddle = Physics2D.Raycast(transform.position, Vector2.down, colliderHeight / 2, groundLayer);
+            */
+            var hitLeft = Physics2D.Raycast(originLeft, Vector2.down, colliderHeight / 2, groundLayer);
+            var hitRight = Physics2D.Raycast(originRight, Vector2.down, colliderHeight / 2, groundLayer);
+            
+            List<RaycastHit2D> hits = new List<RaycastHit2D>() { hitLeft, hitRight};
 
-            if (hit.collider == null)
+            foreach (var hit in hits)
             {
-                playerBB.currentMovingPlatform = null;
-                return false;
-            }
+                if (hit.collider != null)
+                {
+                    if (hit.collider.gameObject.TryGetComponent(out IMovingPlatform movingPlatform))
+                    {
+                        playerBB.currentMovingPlatform = movingPlatform;
+                        _platformOffset = transform.position - movingPlatform.Position;
+                    }
 
-            if (hit.collider.gameObject.TryGetComponent(out IMovingPlatform movingPlatform))
-            {
-                playerBB.currentMovingPlatform = movingPlatform;
-                _platformOffset = transform.position - movingPlatform.Position;
+                    return true;
+                }
             }
-
-            return true;
+            playerBB.currentMovingPlatform = null;
+            return false;
         }
 
         #endregion

@@ -29,10 +29,16 @@ namespace _Game.Scripts.StateMachine.PlayerSM
                     stateMachine.ChangeState(BlackBoard.playerAttackState);
                     return UpdateStateResult.HasChangedState;
                 }
+                
+                if(Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.V))
+                {
+                    stateMachine.ChangeState(BlackBoard.playerThrowState);
+                    return UpdateStateResult.HasChangedState;
+                }
 
                 BlackBoard.horizontal = Input.GetAxisRaw("Horizontal");
-                if (Mathf.Abs(BlackBoard.horizontal) > 0.1f && stateMachine.CurrentState is not PlayerRunState
-                    && stateMachine.CurrentState is not PlayerJumpState)
+                if (Mathf.Abs(BlackBoard.horizontal) > 0.1f && stateMachine.CurrentState != BlackBoard.playerRunState
+                    && stateMachine.CurrentState != BlackBoard.playerJumpState)
                 {
                     stateMachine.ChangeState(BlackBoard.playerRunState);
                     return UpdateStateResult.HasChangedState;

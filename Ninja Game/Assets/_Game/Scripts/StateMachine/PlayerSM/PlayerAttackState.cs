@@ -23,11 +23,14 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             if (IsAnimationFinished())
             {
                 BlackBoard.isAttacking = false;
+                BlackBoard.canAttack = true;
                 stateMachine.ChangeState(BlackBoard.playerIdleState);
                 return UpdateStateResult.HasChangedState;
             }
-
-            return UpdateStateResult.Running;
+            else
+            {
+                return UpdateStateResult.Running;
+            }
         }
 
         public override UpdateStateResult StateFixedUpdate()
