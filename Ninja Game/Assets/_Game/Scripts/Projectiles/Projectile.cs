@@ -4,8 +4,8 @@ namespace _Game.Scripts.Projectiles
 {
     public class Projectile : MonoBehaviour
     {
-        public float speed = 5f;
-        public float maxDistance = 20f;
+        public float speed;
+        public float maxDistance;
         
         protected Vector3 _spawnPosition;
         protected System.Action _returnToPool;

@@ -12,13 +12,13 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         public override void Enter()
         {
             base.Enter();
+            ThrowKunai();
+            
         }
 
         public override UpdateStateResult StateUpdate()
         {
             base.StateUpdate();
-            
-            ThrowKunai();
             
             if (IsAnimationFinished())
             {
@@ -39,11 +39,11 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         {
             float direction = Mathf.Sign(BlackBoard.player.transform.localScale.x); // 1 (right) or -1 (left)
             
-            Vector3 spawnPosition = BlackBoard.player.transform.position + new Vector3(direction, 0, 0);
+            Vector3 spawnPosition = BlackBoard.projectileThrowPoint.transform.position 
+                                    + new Vector3(direction, 0, 0);
             Quaternion spawnRotation = Quaternion.identity;
             Kunai kunai = BlackBoard.kunaiPool.Spawn(spawnPosition, spawnRotation);
             kunai.SetDirection(new Vector3(direction, 0, 0));
-            
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using _Game.Scripts.StateMachine.PlayerSM;
 using Unity.VisualScripting;
 using UnityEngine;
+using Update = UnityEngine.PlayerLoop.Update;
 
 namespace _Game.Scripts.Projectiles
 {
@@ -22,14 +23,17 @@ namespace _Game.Scripts.Projectiles
 
         private void Update()
         {
-            Vector3 newPosition = transform.position + _direction * speed * Time.deltaTime;
-            _rigidbody.MovePosition(newPosition);
-            
             //If the projectile travels more than max distance, return to the pool
             if (Vector3.Distance(_spawnPosition, transform.position) > maxDistance)
             {
                 ReturnToPool();
             }
+        }
+
+        private void FixedUpdate()
+        {
+            Vector3 newPosition = transform.position + _direction * speed * Time.deltaTime;
+            _rigidbody.MovePosition(newPosition);
         }
 
         public void SetDirection(Vector3 direction)

@@ -29,6 +29,8 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         
         public Kunai kunaiPrefab;
         
+        public GameObject projectileThrowPoint;
+        
         public ProjectileFactoryPool<Kunai> kunaiPool;
         
         public PlayerIdleState playerIdleState { get; private set; }
