@@ -8,22 +8,9 @@ namespace _Game.Scripts
     public partial class Player : Character
     {
         #region VARIABLES
-
-        [SerializeField] private Rigidbody2D rb;
-        [SerializeField] private LayerMask groundLayer;
-        [SerializeField] private float speed;
-        [SerializeField] private float jumpForce;
-        [SerializeField] private CapsuleCollider2D playerCollider;
         
         public PlayerBlackboard playerBB;
 
-        private bool _isIdle;
-        private bool _isJumping;
-        private bool _isAttacking;
-        private bool _isRunning;
-        private bool _isFalling;
-
-        private float _horizontal;
         private float _vertical;
         private Vector3 _platformOffset;
 
@@ -52,6 +39,15 @@ namespace _Game.Scripts
             transform.position = playerBB.savePoint;
         }
 
+        public override void OnHit(float damage)
+        {
+            base.OnHit(damage);
+            if (currentHp <= damage || currentHp <= 0)
+            {
+                playerBB.isDead = true;
+            }
+        }
+
         #endregion
 
         #region UNITY-FUNCTIONS
@@ -78,17 +74,19 @@ namespace _Game.Scripts
             if (collision.CompareTag("DeathZone"))
             {
                 playerBB.isDead = true;
+                /*
                 _playerStateMachine.ChangeState(playerBB.playerDieState);
+            */
             }
         }
 
 
         private void OnDrawGizmos()
         {
-            if (playerCollider == null) return;
+            if (playerBB.playerCollider == null) return;
 
-            var colliderHeight = playerCollider.size.y;
-            var colliderWidth = playerCollider.size.x;
+            var colliderHeight = playerBB.playerCollider.size.y;
+            var colliderWidth = playerBB.playerCollider.size.x;
 
             Vector2 originMiddle = transform.position;
             Vector2 originLeft = originMiddle + Vector2.left * (colliderWidth / 2) * 0.5f;
@@ -113,8 +111,8 @@ namespace _Game.Scripts
 
         private bool CheckIfGrounded()
         {
-            var colliderHeight = playerCollider.size.y;
-            var colliderWidth = playerCollider.size.x;
+            var colliderHeight = playerBB. playerCollider.size.y;
+            var colliderWidth = playerBB.playerCollider.size.x;
             
             Vector2 originMiddle = transform.position;
             Vector2 originLeft = originMiddle + Vector2.left * ((colliderWidth / 2) * 0.5f);
@@ -123,8 +121,8 @@ namespace _Game.Scripts
             /*
             var hitMiddle = Physics2D.Raycast(transform.position, Vector2.down, colliderHeight / 2, groundLayer);
             */
-            var hitLeft = Physics2D.Raycast(originLeft, Vector2.down, colliderHeight / 2, groundLayer);
-            var hitRight = Physics2D.Raycast(originRight, Vector2.down, colliderHeight / 2, groundLayer);
+            var hitLeft = Physics2D.Raycast(originLeft, Vector2.down, colliderHeight / 2, playerBB.groundLayer);
+            var hitRight = Physics2D.Raycast(originRight, Vector2.down, colliderHeight / 2, playerBB.groundLayer);
             
             List<RaycastHit2D> hits = new List<RaycastHit2D>() { hitLeft, hitRight};
 
@@ -146,5 +144,6 @@ namespace _Game.Scripts
         }
 
         #endregion
+
     }
 }

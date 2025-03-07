@@ -30,6 +30,8 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             
             BlackBoard.player.enabled = true;
             
+            BlackBoard.player.currentHp = BlackBoard.player.maxHp;
+            
             stateMachine.ChangeState(BlackBoard.playerIdleState);
         }
 

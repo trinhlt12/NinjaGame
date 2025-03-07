@@ -1,5 +1,6 @@
 using _Game.Scripts.StateMachine;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _Game.Scripts
 {
@@ -9,9 +10,11 @@ namespace _Game.Scripts
     
         [SerializeField] private Animator animator;
         
-        private float _hp;
+        public float maxHp = 100;
+        
+        public float currentHp;
+        
         private string _currentAnimName;
-        private bool IsDead => _hp <= 0;
 
         #endregion
 
@@ -23,7 +26,7 @@ namespace _Game.Scripts
 
         public virtual void OnInit()
         {
-            _hp = 100;
+            currentHp = maxHp;
         }
 
         protected virtual void OnDespawn()
@@ -35,26 +38,11 @@ namespace _Game.Scripts
         {
         
         }
-    
-        protected virtual void ChangeAnim(string animName)
-        {
-            if (_currentAnimName == animName) return;
-            animator.ResetTrigger(animName);
-            _currentAnimName = animName;
-            animator.SetTrigger(_currentAnimName);
-        }
+        
 
-        private void OnHit(float damage)
+        public virtual void OnHit(float damage)
         {
-            if (IsDead)
-            {
-                _hp -= damage;
-
-                if (_hp <= damage)
-                {
-                    OnDeath();
-                }
-            }
+            currentHp -= damage;
         }
     
     }

@@ -23,7 +23,6 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             if (IsAnimationFinished())
             {
                 BlackBoard.isAttacking = false;
-                BlackBoard.canAttack = true;
                 stateMachine.ChangeState(BlackBoard.playerIdleState);
                 return UpdateStateResult.HasChangedState;
             }
@@ -43,12 +42,14 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         public override void Exit()
         {
             base.Exit();
+            BlackBoard.isAttacking = false;
+            BlackBoard.attackArea.SetActive(false);
         }
         
 
         private void Attack()
         {
-            
+            BlackBoard.attackArea.SetActive(true);
         }
     }
 }

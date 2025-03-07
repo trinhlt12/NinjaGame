@@ -26,8 +26,13 @@ namespace _Game.Scripts.StateMachine.PlayerSM
 
                 if (Input.GetKeyDown(KeyCode.C) || Input.GetKeyDown(KeyCode.J))
                 {
-                    stateMachine.ChangeState(BlackBoard.playerAttackState);
-                    return UpdateStateResult.HasChangedState;
+                    if (!BlackBoard.isAttacking)
+                    {
+                        stateMachine.ChangeState(BlackBoard.playerAttackState);
+                        return UpdateStateResult.HasChangedState;
+                    }
+                    return UpdateStateResult.Running;
+
                 }
                 
                 if(Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.V))
@@ -37,11 +42,9 @@ namespace _Game.Scripts.StateMachine.PlayerSM
                         stateMachine.ChangeState(BlackBoard.playerThrowState);
                         return UpdateStateResult.HasChangedState;
                     }
-                    else
-                    {
-                        return UpdateStateResult.Running;
-                    }
-                    
+
+                    return UpdateStateResult.Running;
+
                 }
 
                 BlackBoard.horizontal = Input.GetAxisRaw("Horizontal");

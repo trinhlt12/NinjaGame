@@ -36,6 +36,15 @@ namespace _Game.Scripts.Projectiles
             _rigidbody.MovePosition(newPosition);
         }
 
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.CompareTag("Enemy"))
+            {
+                collision.GetComponent<Character>().OnHit(30f);
+                ReturnToPool();
+            }
+        }
+
         public void SetDirection(Vector3 direction)
         {
             _direction = direction.normalized;

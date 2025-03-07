@@ -25,7 +25,6 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         public bool isGrounded;
         public bool isDead;
         public bool isAttacking = false;
-        public bool canAttack;
         public bool isThrowing;
         
         public Kunai kunaiPrefab;
@@ -43,9 +42,10 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         
         public PlayerThrowState playerThrowState { get; private set; }
 
-        private void Awake()
+        protected override void Awake()
         {
             kunaiPool = new ProjectileFactoryPool<Kunai>(kunaiPrefab, 10);
+            attackArea.SetActive(false);
         }
 
         public PlayerBlackboard(Player player)

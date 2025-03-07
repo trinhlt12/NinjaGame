@@ -27,7 +27,9 @@ namespace _Game.Scripts.StateMachine
             {
                 //rotate enemy to face the player
                 BlackBoard.enemy.ChangeDirection(BlackBoard.Target.transform.position.x > BlackBoard.enemy.transform.position.x);
+                /*
                 Attack();
+            */
             }
         }
 
@@ -61,13 +63,19 @@ namespace _Game.Scripts.StateMachine
             return UpdateStateResult.Running;
         }
 
+        public override void Exit()
+        {
+            base.Exit();
+            BlackBoard.attackArea.SetActive(false);
+        }
+
         #endregion
 
         #region CUSTOM METHODS
 
         private void Attack()
         {
-            
+            BlackBoard.attackArea.SetActive(true);
         }
 
         #endregion

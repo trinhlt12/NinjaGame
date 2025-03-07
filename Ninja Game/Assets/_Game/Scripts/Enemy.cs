@@ -62,15 +62,19 @@ namespace _Game.Scripts
         {
             base.OnDespawn();
         }
-        
-        protected override void ChangeAnim(string animName)
-        {
-            base.ChangeAnim(animName);
-        }
 
         protected override void OnDeath()
         {
             base.OnDeath();
+        }
+
+        public override void OnHit(float damage)
+        {
+            base.OnHit(damage);
+            if (currentHp <= damage || currentHp <= 0)
+            {
+                enemyBB.isDead = true;
+            }
         }
 
         #endregion

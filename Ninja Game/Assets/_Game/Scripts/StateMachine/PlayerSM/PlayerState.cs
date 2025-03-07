@@ -28,10 +28,15 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             
             ElapsedTime += Time.deltaTime;
             
+            if(BlackBoard.isDead && stateMachine.CurrentState != BlackBoard.playerDieState)
+            {
+                stateMachine.ChangeState(BlackBoard.playerDieState);
+                return UpdateStateResult.HasChangedState;
+            }
+            
             if ((Input.GetKeyDown(KeyCode.C) || Input.GetKeyDown(KeyCode.J)) && Time.time >= _lastAttackTime + BlackBoard.attackCooldown)
             {
                 _lastAttackTime = Time.time;
-                BlackBoard.canAttack = true;
             }
 
             return UpdateStateResult.Running;
