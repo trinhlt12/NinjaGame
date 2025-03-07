@@ -26,6 +26,7 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         public bool isDead;
         public bool isAttacking = false;
         public bool canAttack;
+        public bool isThrowing;
         
         public Kunai kunaiPrefab;
         

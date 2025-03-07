@@ -27,8 +27,7 @@ namespace _Game.Scripts.StateMachine.PlayerSM
                 return UpdateStateResult.HasChangedState;
             }
             
-            BlackBoard.rigidbody2D.velocity = new Vector2(BlackBoard.horizontal * Time.fixedDeltaTime * BlackBoard.speed, 
-                BlackBoard.rigidbody2D.velocity.y);
+            Run();
             
             if (BlackBoard.horizontal != 0)
             {
@@ -45,6 +44,12 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             }
 
             return UpdateStateResult.Running;
+        }
+
+        private void Run()
+        {
+            BlackBoard.rigidbody2D.velocity = new Vector2(BlackBoard.horizontal * Time.fixedDeltaTime * BlackBoard.speed, 
+                BlackBoard.rigidbody2D.velocity.y);
         }
 
         public override void Exit()

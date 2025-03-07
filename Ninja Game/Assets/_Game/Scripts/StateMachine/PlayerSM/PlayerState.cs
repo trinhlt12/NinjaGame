@@ -6,6 +6,7 @@ namespace _Game.Scripts.StateMachine.PlayerSM
     public class PlayerState : BaseState<PlayerBlackboard>
     {
         private float _lastAttackTime;
+        protected float ElapsedTime;
         public PlayerState(StateMachine<PlayerBlackboard> stateMachine, PlayerBlackboard playerBb, string animationName) : base(stateMachine, playerBb, animationName)
         {
         }
@@ -13,6 +14,7 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         public override void Enter()
         {
             base.Enter();
+            ElapsedTime = 0f; //Reset the elapsed time
         }
 
         public override void Exit()
@@ -23,6 +25,8 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         public override UpdateStateResult StateUpdate()
         {
             base.StateUpdate();
+            
+            ElapsedTime += Time.deltaTime;
             
             if ((Input.GetKeyDown(KeyCode.C) || Input.GetKeyDown(KeyCode.J)) && Time.time >= _lastAttackTime + BlackBoard.attackCooldown)
             {

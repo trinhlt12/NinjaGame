@@ -12,6 +12,8 @@ namespace _Game.Scripts.StateMachine.PlayerSM
         public override void Enter()
         {
             base.Enter();
+            BlackBoard.horizontal = 0;
+            BlackBoard.isThrowing = true;
             ThrowKunai();
             
         }
@@ -22,6 +24,7 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             
             if (IsAnimationFinished())
             {
+                BlackBoard.isThrowing = false;
                 stateMachine.ChangeState(BlackBoard.playerIdleState);
                 return UpdateStateResult.HasChangedState;
             }
@@ -33,6 +36,13 @@ namespace _Game.Scripts.StateMachine.PlayerSM
             base.StateFixedUpdate();
             BlackBoard.rigidbody2D.velocity = Vector2.zero;
             return UpdateStateResult.Running;
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            BlackBoard.isThrowing = false;
+            BlackBoard.horizontal = Input.GetAxisRaw("Horizontal");
         }
 
         private void ThrowKunai()
